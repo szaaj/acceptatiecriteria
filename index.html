@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesregiekamer — Acceptatiecriteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/schema.css">
+    <link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+
+<!-- ── ACTIEVE FASE BALK ──────────────────────────────── -->
+<div class="actieve-fase-balk" id="actieve-balk" style="display:none;">
+    <span id="actieve-label">Fase actief</span>
+    <span class="actieve-timer" id="actieve-timer">0:00</span>
+</div>
+
+<!-- ── MELDING TOAST ─────────────────────────────────── -->
+<div class="melding" id="melding"></div>
+
+<!-- ── HOOFD WRAPPER ─────────────────────────────────── -->
+<div class="les-wrapper">
+    <header class="les-header">
+        <div class="les-titel">
+            <span class="les-icon">🧪</span>
+            <div>
+                <h1>Acceptatiecriteria</h1>
+                <p class="les-sub">MBO-4 Software Developer &middot; 45 minuten</p>
+            </div>
+        </div>
+        <div class="klok-blok">
+            <div class="klok" id="klok">00:00</div>
+            <div class="klok-label">verstreken tijd</div>
+        </div>
+    </header>
+    <div class="fasen-grid" id="fasen-grid"></div>
+</div>
+
+<!-- ── CONTROLS ──────────────────────────────────────── -->
+<div class="controls">
+    <button class="btn-ctrl" id="btn-prev">&#9664; Vorige</button>
+    <button class="btn-ctrl btn-start" id="btn-start">&#9654; Start fase</button>
+    <button class="btn-ctrl" id="btn-next">Volgende &#9654;</button>
+    <button class="btn-ctrl btn-reset" id="btn-reset">&#8635; Reset</button>
+    <button class="btn-ctrl btn-bel" id="btn-bel">&#128276; Aandacht</button>
+    <button class="btn-ctrl btn-code" id="btn-code">&#128273; Code invoeren</button>
+</div>
+
+<!-- ── AUTH MODAL ─────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-auth">
+    <div class="modal-box">
+        <button class="modal-sluit" id="modal-sluit">&#10005;</button>
+        <div class="modal-titel">&#128273; Code invoeren</div>
+        <p class="modal-sub">Voer de docentcode in voor volledige toegang,<br>of de fase-code die je docent heeft gedeeld.</p>
+        <div class="modal-input-rij">
+            <input type="password" id="modal-input" placeholder="CODE" maxlength="10" autocomplete="off" spellcheck="false">
+            <button id="modal-ok">OK</button>
+        </div>
+        <div id="modal-fout"></div>
+        <p class="modal-hint">Tip: codes zijn niet hoofdlettergevoelig</p>
+    </div>
+</div>
+
+<!-- ── SCRIPTS — volgorde is belangrijk ──────────────── -->
+<script src="js/config.js"></script>
+<script src="js/Timer.js"></script>
+<script src="js/Fase.js"></script>
+<script src="js/AuthManager.js"></script>
+<script src="js/LesSchema.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

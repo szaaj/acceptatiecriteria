@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐛 Bug Hunt — Vind de uitgang!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="screen-start" class="screen active">
+    <div class="scanlines"></div>
+    <div class="center-content">
+        <div class="glitch-title" data-text="BUG HUNT">BUG HUNT</div>
+        <p class="subtitle">Navigeer de 🐛 naar de uitgang 🚪</p>
+        <div class="instructions-box">
+            <p>Gebruik de <span class="key">↑</span> <span class="key">↓</span> <span class="key">←</span> <span class="key">→</span> pijltoetsen</p>
+            <p class="small">Klinkt simpel... toch?</p>
+        </div>
+        <button id="btn-start" class="btn-arcade">▶ START SPEL</button>
+    </div>
+</div>
+
+<div id="screen-game" class="screen">
+    <div class="scanlines"></div>
+    <div class="hud">
+        <div class="hud-item">STAPPEN: <span id="moves">0</span></div>
+        <div class="hud-item level-badge">LEVEL <span id="level-display">1</span></div>
+        <div class="hud-item">TIJD: <span id="timer">0</span>s</div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="control-hint" class="control-hint"></div>
+</div>
+
+<div id="screen-win" class="screen">
+    <div class="scanlines"></div>
+    <div class="center-content">
+        <div class="win-emoji">🎉</div>
+        <h1 class="win-title">GELUKT!</h1>
+        <div class="stats-box">
+            <div class="stat"><span class="stat-label">Stappen</span><span id="final-moves" class="stat-value">0</span></div>
+            <div class="stat"><span class="stat-label">Tijd</span><span id="final-time" class="stat-value">0s</span></div>
+        </div>
+        <p id="win-message" class="win-message"></p>
+        <div class="btn-group">
+            <button id="btn-next" class="btn-arcade">VOLGENDE LEVEL ▶</button>
+            <button id="btn-restart" class="btn-arcade btn-secondary">↺ OPNIEUW</button>
+        </div>
+    </div>
+</div>
+
+<div id="screen-reveal" class="screen">
+    <div class="scanlines"></div>
+    <div class="center-content">
+        <div class="reveal-icon">🐛💡</div>
+        <h1 class="reveal-title">WAT GING ER MIS?</h1>
+        <div id="reveal-content" class="reveal-box"></div>
+        <div class="reveal-lesson">
+            <h2>Acceptatiecriteria hadden dit voorkomen:</h2>
+            <ul id="criteria-list"></ul>
+        </div>
+        <button id="btn-class" class="btn-arcade">NAAR DE LES ▶</button>
+    </div>
+</div>
+
+<div id="screen-done" class="screen">
+    <div class="scanlines"></div>
+    <div class="center-content">
+        <div class="done-icon">🏆</div>
+        <h1 class="done-title">ALLE LEVELS VOLTOOID!</h1>
+        <p class="done-sub">Jullie hebben alle bugs overleefd.</p>
+        <p class="done-lesson">Nu weten jullie waarom goede testen zo belangrijk zijn.<br>Tijd voor de les! 💡</p>
+        <button id="btn-home" class="btn-arcade">↩ TERUG NAAR START</button>
+    </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>

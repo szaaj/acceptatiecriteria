@@ -1,0 +1,313 @@
+/* ── LAYOUT ────────────────────────────────────────────── */
+.les-wrapper {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 32px 120px;
+    gap: 24px;
+    min-height: 100vh;
+}
+
+/* ── HEADER ────────────────────────────────────────────── */
+.les-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    border-left: 6px solid var(--groen);
+}
+
+.les-titel { display: flex; align-items: center; gap: 20px; }
+.les-icon  { font-size: 3rem; }
+
+.les-titel h1 {
+    font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+    font-weight: 900;
+    color: var(--groen);
+    letter-spacing: -0.5px;
+}
+
+.les-sub {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--dim);
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+.header-rechts { display: flex; align-items: center; gap: 20px; }
+.klok-blok { text-align: center; }
+
+.klok {
+    font-family: var(--font-mono);
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: var(--goud);
+    letter-spacing: 3px;
+}
+
+.klok-label {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--dim);
+    letter-spacing: 2px;
+    margin-top: 4px;
+}
+
+/* ── FASEN GRID ────────────────────────────────────────── */
+.fasen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+/* ── FASE KAART ────────────────────────────────────────── */
+.fase-kaart {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    --fase-kleur: var(--groen);
+}
+
+.fase-kaart::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--border);
+    transition: background 0.2s;
+}
+
+.fase-kaart.ontgrendeld:hover {
+    border-color: var(--fase-kleur);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+
+.fase-kaart.ontgrendeld::before { background: var(--fase-kleur); }
+.fase-kaart.actief              { border-color: var(--fase-kleur); box-shadow: 0 0 28px rgba(0,192,122,0.2); }
+.fase-kaart.actief::before      { background: var(--fase-kleur); }
+.fase-kaart.gedaan              { opacity: 0.45; }
+.fase-kaart.gedaan::before      { background: var(--dim); }
+.fase-kaart.vergrendeld         { cursor: default; }
+.fase-kaart.vergrendeld:hover   { border-color: var(--border); transform: none; }
+
+.fase-kaart.alarm::before {
+    background: var(--oranje);
+    animation: alarm-knip 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes alarm-knip {
+    from { opacity: 1; }
+    to   { opacity: 0.3; }
+}
+
+/* Slot overlay */
+.fase-slot {
+    position: absolute; inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15,17,23,0.6);
+    border-radius: var(--radius);
+    backdrop-filter: blur(2px);
+    font-size: 2.6rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Fase nummer */
+.fase-nummer {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--dim);
+    letter-spacing: 3px;
+}
+
+.fase-kaart.actief .fase-nummer { color: var(--fase-kleur); }
+
+/* Inhoud */
+.fase-inhoud { flex: 1; }
+.fase-emoji  { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+
+.fase-inhoud h2 {
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.fase-inhoud p {
+    font-size: 0.95rem;
+    color: var(--dim);
+    line-height: 1.5;
+    font-family: var(--font-mono);
+}
+
+/* Werkvorm badge */
+.werkvorm-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.wv-klassikaal { background: rgba(79,172,254,0.12);  color: var(--blauw); border: 1px solid rgba(79,172,254,0.25); }
+.wv-groepen    { background: rgba(167,139,250,0.12); color: var(--paars); border: 1px solid rgba(167,139,250,0.25); }
+.wv-solo       { background: rgba(251,191,36,0.12);  color: var(--goud);  border: 1px solid rgba(251,191,36,0.25); }
+
+/* Timer ring */
+.fase-tijd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.tijd-label {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--dim);
+    letter-spacing: 1px;
+}
+
+.timer-ring { position: relative; width: 80px; height: 80px; }
+
+.timer-ring svg {
+    width: 80px; height: 80px;
+    transform: rotate(-90deg);
+}
+
+.ring-bg   { fill: none; stroke: var(--border); stroke-width: 5; }
+.ring-prog {
+    fill: none;
+    stroke: var(--fase-kleur);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 150.8;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.fase-kaart.gedaan .ring-prog { stroke: var(--dim); }
+.fase-kaart.alarm  .ring-prog { stroke: var(--oranje); }
+
+.timer-tekst {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.fase-kaart.actief .timer-tekst { color: var(--fase-kleur); }
+
+/* ── CONTROLS ──────────────────────────────────────────── */
+.controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(15,17,23,0.97);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    flex-wrap: wrap;
+}
+
+.btn-ctrl {
+    font-family: var(--font-hoofd);
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--dim);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.btn-ctrl:hover:not(:disabled) { border-color: var(--groen); color: var(--groen); }
+.btn-ctrl:disabled { opacity: 0.3; cursor: default; }
+
+.btn-start {
+    border-color: var(--groen);
+    color: var(--groen);
+    background: var(--groen-dim);
+    min-width: 180px;
+}
+
+.btn-start:hover:not(:disabled) { background: var(--groen); color: var(--bg); }
+.btn-start.running               { border-color: var(--oranje); color: var(--oranje); background: rgba(255,107,53,0.1); }
+.btn-start.running:hover         { background: var(--oranje); color: var(--bg); }
+
+.btn-code  { border-color: var(--goud); color: var(--goud); }
+.btn-code:hover:not(:disabled)  { background: var(--goud); color: var(--bg); }
+
+.btn-bel   { border-color: var(--paars); color: var(--paars); font-size: 1.2rem; display: none; }
+.btn-bel.zichtbaar { display: inline-flex; }
+.btn-bel:hover:not(:disabled)   { background: var(--paars); color: var(--bg); }
+.btn-bel.rinkelt                { animation: bel-pulse 0.4s ease infinite alternate; }
+
+@keyframes bel-pulse {
+    from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+    to   { box-shadow: 0 0 0 14px rgba(167,139,250,0); }
+}
+
+.btn-reset:hover:not(:disabled) { border-color: var(--oranje); color: var(--oranje); }
+
+/* ── ACTIEVE FASE BALK ─────────────────────────────────── */
+.actieve-fase-balk {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--groen);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    padding: 12px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 200;
+    letter-spacing: 1px;
+}
+
+.actieve-timer { font-size: 1.4rem; font-weight: 700; }
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .fasen-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 800px) {
+    .fasen-grid  { grid-template-columns: repeat(2, 1fr); }
+    .les-wrapper { padding: 16px 16px 110px; }
+}
+
+@media (max-width: 500px) {
+    .fasen-grid  { grid-template-columns: 1fr; }
+    .les-header  { flex-direction: column; gap: 12px; align-items: flex-start; }
+}

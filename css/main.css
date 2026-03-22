@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Anybody:wght@400;600;700;900&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── VARIABELEN ────────────────────────────────────────── */
+:root {
+    --bg:         #0f1117;
+    --surface:    #1a1d27;
+    --border:     #2a2d3a;
+    --groen:      #00c07a;
+    --groen-dim:  #0a2e1c;
+    --oranje:     #ff6b35;
+    --blauw:      #4facfe;
+    --paars:      #a78bfa;
+    --goud:       #fbbf24;
+    --rood:       #ef4444;
+    --text:       #e8eaf0;
+    --dim:        #6b7280;
+    --radius:     14px;
+    --radius-sm:  8px;
+    --font-hoofd: 'Anybody', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+}
+
+/* ── RESET & BASIS ─────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-hoofd);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Achtergrond grid */
+body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+        linear-gradient(rgba(0,192,122,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,192,122,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── MELDING TOAST ─────────────────────────────────────── */
+.melding {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    z-index: 999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.melding.zichtbaar { transform: translateX(-50%) translateY(0); }
+.melding-succes { border-color: var(--groen); color: var(--groen); }
+.melding-alarm  { border-color: var(--oranje); color: var(--oranje); }
+.melding-fout   { border-color: var(--rood); color: var(--rood); }
+
+/* ── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

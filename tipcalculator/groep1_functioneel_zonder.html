@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groep 1 — Functioneel testen (zonder AC)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#f8faf9; --surf:#fff; --bord:#e2e8f0; --rood:#e63946; --rood-l:#ffe5e5; --goud:#f59e0b; --text:#1a202c; --dim:#6b7280; }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;padding:24px;}
+        @media print{.no-print{display:none!important}body{padding:10mm;background:white;}}
+        .doc-header{max-width:780px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:3px solid var(--rood);}
+        .doc-header h1{font-size:1.6rem;font-weight:800;}
+        .doc-header h1 span{color:var(--rood);}
+        .doc-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:4px;}
+        .groep-badge{font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;padding:6px 16px;border-radius:20px;background:var(--rood);color:white;letter-spacing:1px;}
+        .actie-balk{max-width:780px;margin:0 auto 16px;display:flex;gap:10px;}
+        .btn{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
+        .btn-print{background:var(--rood);color:white;}
+        .uitleg{max-width:780px;margin:0 auto 20px;background:#fff3f3;border:1px solid rgba(230,57,70,0.3);border-left:5px solid var(--rood);border-radius:10px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.88rem;line-height:1.6;}
+        .uitleg strong{color:var(--rood);}
+        .test-kaart{max-width:780px;margin:0 auto 20px;background:var(--surf);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid var(--bord);}
+        .kaart-header{background:#fff3f3;border-bottom:2px solid rgba(230,57,70,0.15);padding:16px 22px;}
+        .kaart-header h2{font-size:1.1rem;font-weight:800;color:var(--rood);}
+        .kaart-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:2px;}
+        .test-item{padding:18px 22px;border-bottom:1px solid var(--bord);}
+        .test-item:last-child{border-bottom:none;}
+        .test-nr{display:inline-block;width:28px;height:28px;border-radius:50%;background:#fff3f3;color:var(--rood);font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;text-align:center;line-height:28px;margin-right:10px;}
+        .test-vraag{font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--text);line-height:1.6;background:var(--bg);padding:10px 14px;border-radius:8px;margin:10px 0;border-left:3px solid var(--rood);}
+        .invoer-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--dim);display:block;margin-bottom:4px;}
+        textarea{width:100%;min-height:60px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;padding:10px;border:2px solid var(--bord);border-radius:8px;background:white;resize:vertical;outline:none;}
+        textarea:focus{border-color:var(--rood);}
+        .voldoet-rij{display:flex;align-items:center;gap:12px;margin-top:10px;}
+        .voldoet-label{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;}
+        .radio-opties{display:flex;gap:10px;}
+        .radio-optie{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;cursor:pointer;}
+        .radio-optie input{cursor:pointer;accent-color:var(--rood);}
+        .conclusie-blok{max-width:780px;margin:0 auto 20px;background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:20px 24px;}
+        .conclusie-blok h3{font-size:1.1rem;font-weight:800;color:var(--rood);margin-bottom:12px;}
+        .conclusie-blok textarea{min-height:80px;}
+    </style>
+</head>
+<body>
+<div class="doc-header">
+    <div>
+        <h1>TipSplit <span>Functioneel testen</span></h1>
+        <p>Groep 1 · Zonder acceptatiecriteria · Test gewoon of het "werkt"</p>
+    </div>
+    <span class="groep-badge">GROEP 1</span>
+</div>
+
+<div class="actie-balk no-print">
+    <a href="../../index.html" style="text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 16px;border-radius:8px;border:1px solid #1e2330;background:#12151c;color:#5a6278;display:inline-flex;align-items:center;gap:6px;">🏠 Home</a>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Afdrukken</button>
+</div>
+
+<div class="uitleg">
+    <strong>Opdracht:</strong> Test TipSplit op functionaliteit. Je hebt geen lijst van criteria — kijk gewoon of het programma "goed werkt". Noteer wat je doet en wat je ziet. Bespreek daarna met Groep 2 wat jullie gevonden hebben.
+</div>
+
+<div class="test-kaart">
+    <div class="kaart-header">
+        <h2>Test 1 — Basisfunctionaliteit</h2>
+        <p>Test het programma vrij — geen vooraf bepaalde aanpak</p>
+    </div>
+
+    <div class="test-item">
+        <span class="test-nr">1</span><strong>Voer een bedrag, fooi-percentage en aantal personen in en bereken</strong>
+        <div class="test-vraag">Probeer: €100 · 10% · 2 personen</div>
+        <label class="invoer-label">Wat toont TipSplit?</label>
+        <textarea placeholder="Schrijf hier wat het programma laat zien..."></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Werkt het?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v1"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v1"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v1"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-item">
+        <span class="test-nr">2</span><strong>Probeer verschillende fooi-percentages</strong>
+        <div class="test-vraag">Probeer: 0%, 10%, 15%, 20% en Anders%</div>
+        <label class="invoer-label">Wat valt je op?</label>
+        <textarea placeholder="Noteer wat je ziet bij elk percentage..."></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Werkt het?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v2"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v2"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v2"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-item">
+        <span class="test-nr">3</span><strong>Verander het aantal personen</strong>
+        <div class="test-vraag">Probeer: 1, 2, 5 en 10 personen</div>
+        <label class="invoer-label">Klopt de berekening per persoon?</label>
+        <textarea placeholder="Noteer je bevindingen..."></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Werkt het?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v3"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v3"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v3"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="conclusie-blok">
+    <h3>Jouw conclusie</h3>
+    <label class="invoer-label">Werkt TipSplit goed? Wat heb je gevonden?</label>
+    <textarea placeholder="Schrijf hier je conclusie. Wat werkt goed? Wat werkt niet?"></textarea>
+    <label class="invoer-label" style="margin-top:12px;">Hoe moeilijk was het om te beoordelen of iets "klopt"?</label>
+    <textarea placeholder="Was het makkelijk of moeilijk om te zeggen of iets goed is? Waarom?"></textarea>
+</div>
+</body>
+</html>

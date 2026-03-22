@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesoverzicht — Acceptatiecriteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0a0c10;
+            --surface: #12151c;
+            --border:  #1e2330;
+            --groen:   #00c07a;
+            --oranje:  #ff6b35;
+            --blauw:   #4facfe;
+            --paars:   #a78bfa;
+            --goud:    #fbbf24;
+            --text:    #eef0f6;
+            --dim:     #5a6278;
+            --sans:    'Syne', sans-serif;
+            --mono:    'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            padding: 80px 48px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,192,122,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,192,122,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── TOP BALK ──────────────────────────────── */
+        .top-balk {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px;
+            background: rgba(10,12,16,0.97); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 20px; z-index: 200;
+        }
+
+        .top-btn {
+            font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+            padding: 7px 16px; border-radius: 7px;
+            border: 1px solid var(--border); background: var(--surface);
+            color: var(--dim); cursor: pointer; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s;
+        }
+        .top-btn:hover { border-color: var(--groen); color: var(--groen); }
+        .top-scheider  { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel     { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        /* ── CONTENT ───────────────────────────────── */
+        .content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 32px; }
+
+        /* ── HEADER ────────────────────────────────── */
+        .pagina-header {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 20px;
+            animation: fadeDown 0.4s ease both;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .pagina-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+        }
+
+        .pagina-header h1 em { font-style: normal; color: var(--groen); }
+        .pagina-header p { font-family: var(--mono); font-size: 0.88rem; color: var(--dim); margin-top: 8px; }
+
+        .duur-badge {
+            background: rgba(0,192,122,0.08); border: 1px solid rgba(0,192,122,0.2);
+            border-radius: 12px; padding: 14px 22px; text-align: center; flex-shrink: 0;
+        }
+        .duur-badge .nr    { font-family: var(--mono); font-size: 1.6rem; font-weight: 700; color: var(--groen); display: block; }
+        .duur-badge .label { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); letter-spacing: 2px; display: block; margin-top: 2px; }
+
+        /* ── LEERDOELEN ────────────────────────────── */
+        .leerdoelen-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+            animation: fadeUp 0.4s ease 0.1s both; opacity: 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .ld-kaart {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 18px 20px;
+            display: flex; flex-direction: column; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+
+        .ld-kaart::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        }
+
+        .ld-kaart.blauw::before  { background: var(--blauw); }
+        .ld-kaart.goud::before   { background: var(--goud); }
+        .ld-kaart.oranje::before { background: var(--oranje); }
+
+        .ld-bloom {
+            font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 2px; padding: 3px 10px; border-radius: 20px; align-self: flex-start;
+        }
+        .blauw  .ld-bloom { background: rgba(79,172,254,0.1);  color: var(--blauw); border: 1px solid rgba(79,172,254,0.2); }
+        .goud   .ld-bloom { background: rgba(251,191,36,0.1);  color: var(--goud);  border: 1px solid rgba(251,191,36,0.2); }
+        .oranje .ld-bloom { background: rgba(255,107,53,0.1);  color: var(--oranje);border: 1px solid rgba(255,107,53,0.2); }
+
+        .ld-nr { font-size: 1.4rem; font-weight: 800; }
+        .blauw  .ld-nr { color: var(--blauw); }
+        .goud   .ld-nr { color: var(--goud); }
+        .oranje .ld-nr { color: var(--oranje); }
+
+        .ld-tekst { font-family: var(--mono); font-size: clamp(0.82rem,1.1vw,0.95rem); color: var(--text); line-height: 1.6; }
+        .ld-tekst strong { }
+        .blauw  .ld-tekst strong { color: var(--blauw); }
+        .goud   .ld-tekst strong { color: var(--goud); }
+        .oranje .ld-tekst strong { color: var(--oranje); }
+
+        /* ── SCHEIDER ──────────────────────────────── */
+        .scheider {
+            font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 3px; color: var(--dim);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .scheider::before, .scheider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        /* ── STAPPEN ───────────────────────────────── */
+        .stappen { display: flex; flex-direction: column; gap: 10px; animation: fadeUp 0.4s ease 0.2s both; opacity: 0; }
+
+        .stap {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 18px 22px;
+            display: grid; grid-template-columns: 52px 1fr auto;
+            align-items: center; gap: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .stap:hover { border-color: var(--groen); }
+
+        .stap-nr-wrap { text-align: center; }
+        .stap-nr {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 800; display: block; line-height: 1;
+        }
+        .stap-emoji { font-size: 1.1rem; display: block; margin-top: 2px; }
+
+        .stap-body { display: flex; flex-direction: column; gap: 4px; }
+        .stap-titel { font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 800; }
+        .stap-omschrijving { font-family: var(--mono); font-size: clamp(0.8rem, 1.1vw, 0.92rem); color: var(--dim); line-height: 1.5; }
+
+        .stap-tijd {
+            font-family: var(--mono); font-size: clamp(0.78rem, 1vw, 0.9rem);
+            font-weight: 700; color: var(--dim);
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; padding: 6px 12px; white-space: nowrap; text-align: center;
+        }
+
+        /* Bloom kleur per stap */
+        .stap.blauw  .stap-nr { color: var(--blauw); }
+        .stap.goud   .stap-nr { color: var(--goud); }
+        .stap.oranje .stap-nr { color: var(--oranje); }
+        .stap.groen  .stap-nr { color: var(--groen); }
+        .stap.paars  .stap-nr { color: var(--paars); }
+
+        .stap.blauw  { border-left: 3px solid var(--blauw); }
+        .stap.goud   { border-left: 3px solid var(--goud); }
+        .stap.oranje { border-left: 3px solid var(--oranje); }
+        .stap.groen  { border-left: 3px solid var(--groen); }
+        .stap.paars  { border-left: 3px solid var(--paars); }
+
+        .stap.blauw  .stap-tijd { color: var(--blauw); border-color: rgba(79,172,254,0.3); }
+        .stap.goud   .stap-tijd { color: var(--goud);  border-color: rgba(251,191,36,0.3); }
+        .stap.oranje .stap-tijd { color: var(--oranje);border-color: rgba(255,107,53,0.3); }
+        .stap.groen  .stap-tijd { color: var(--groen); border-color: rgba(0,192,122,0.3); }
+        .stap.paars  .stap-tijd { color: var(--paars); border-color: rgba(167,139,250,0.3); }
+
+        /* ── KLEUR LEGENDA ─────────────────────────── */
+        .legenda {
+            display: flex; gap: 20px; flex-wrap: wrap;
+            font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
+            animation: fadeUp 0.4s ease 0.3s both; opacity: 0;
+        }
+        .legenda-item { display: flex; align-items: center; gap: 8px; }
+        .legenda-dot  { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* ── ATTENTIEKNOP ──────────────────────────── */
+        .btn-attentie {
+            position: fixed; bottom: 24px; right: 24px;
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 2px solid var(--paars); background: rgba(10,12,16,0.95);
+            color: var(--paars); font-size: 1.4rem; cursor: pointer; z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4); transition: all 0.15s;
+        }
+        .btn-attentie:hover { background: var(--paars); color: var(--bg); transform: scale(1.08); }
+        .btn-attentie.rinkelt { animation: bel-pulse 0.4s ease infinite alternate; }
+        @keyframes bel-pulse {
+            from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+            to   { box-shadow: 0 0 0 16px rgba(167,139,250,0); }
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 70px 20px 60px; }
+            .leerdoelen-grid { grid-template-columns: 1fr; }
+            .stap { grid-template-columns: 44px 1fr; }
+            .stap-tijd { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BALK -->
+<div class="top-balk">
+    <a class="top-btn" href="../index.html">🏠 Home</a>
+    <div class="top-scheider"></div>
+    <span class="top-titel">LESOVERZICHT · Acceptatiecriteria</span>
+</div>
+
+<button class="btn-attentie" id="btn-attentie">&#128276;</button>
+
+<div class="content">
+
+    <!-- HEADER -->
+    <div class="pagina-header">
+        <div>
+            <h1>Les: <em>Acceptatiecriteria</em></h1>
+            <p>MBO-4 Software Developer &nbsp;·&nbsp; 45 minuten &nbsp;·&nbsp; Losse les</p>
+        </div>
+        <div class="duur-badge">
+            <span class="nr">45</span>
+            <span class="label">MINUTEN</span>
+        </div>
+    </div>
+
+    <!-- LEERDOELEN -->
+    <div class="scheider">LEERDOELEN</div>
+
+    <div class="leerdoelen-grid">
+        <div class="ld-kaart blauw">
+            <span class="ld-bloom">BEGRIJPEN</span>
+            <span class="ld-nr">1</span>
+            <div class="ld-tekst"><strong>Je beschrijft</strong> wat acceptatiecriteria zijn en wat hun functie is bij een user story</div>
+        </div>
+        <div class="ld-kaart goud">
+            <span class="ld-bloom">TOEPASSEN</span>
+            <span class="ld-nr">2</span>
+            <div class="ld-tekst"><strong>Je schrijft</strong> acceptatiecriteria in het Als/Dan-format</div>
+        </div>
+        <div class="ld-kaart oranje">
+            <span class="ld-bloom">ANALYSEREN</span>
+            <span class="ld-nr">3</span>
+            <div class="ld-tekst"><strong>Je beoordeelt</strong> of een criterium voldoet aan de kenmerken van een goed criterium (concreet, meetbaar, testbaar)</div>
+        </div>
+    </div>
+
+    <!-- STAPPEN -->
+    <div class="scheider">LESOPBOUW</div>
+
+    <div class="stappen">
+
+        <div class="stap blauw">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">1</span>
+                <span class="stap-emoji">🎮</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Bug Hunt</span>
+                <span class="stap-omschrijving">Speel het spel en ontdek wat niet klopt.</span>
+            </div>
+            <span class="stap-tijd">0–5 min</span>
+        </div>
+
+        <div class="stap blauw">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">2</span>
+                <span class="stap-emoji">💬</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Reflectie</span>
+                <span class="stap-omschrijving">Wat viel op? Wanneer wist je zeker dat iets fout was?</span>
+            </div>
+            <span class="stap-tijd">5–8 min</span>
+        </div>
+
+        <div class="stap blauw">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">3</span>
+                <span class="stap-emoji">📖</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Theorie</span>
+                <span class="stap-omschrijving">Wat zijn acceptatiecriteria en waarom heb je ze nodig?</span>
+            </div>
+            <span class="stap-tijd">8–17 min</span>
+        </div>
+
+        <div class="stap goud">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">4</span>
+                <span class="stap-emoji">🧮</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Opdracht</span>
+                <span class="stap-omschrijving">Schrijf 2 acceptatiecriteria voor TipSplit en gebruik deze direct om het programma te testen.</span>
+            </div>
+            <span class="stap-tijd">17–32 min</span>
+        </div>
+
+        <div class="stap oranje">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">5</span>
+                <span class="stap-emoji">⚖️</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Nabespreking</span>
+                <span class="stap-omschrijving">Bespreek wat opviel en vergelijk een minder goed en een goed criterium. Wat maakt een criterium concreet, meetbaar en testbaar?</span>
+            </div>
+            <span class="stap-tijd">32–42 min</span>
+        </div>
+
+        <div class="stap groen">
+            <div class="stap-nr-wrap">
+                <span class="stap-nr">6</span>
+                <span class="stap-emoji">🏷️</span>
+            </div>
+            <div class="stap-body">
+                <span class="stap-titel">Afsluiting</span>
+                <span class="stap-omschrijving">Schrijf individueel 1 acceptatiecriterium voor je portfolio. Benoem waar een goed criterium aan voldoet.</span>
+            </div>
+            <span class="stap-tijd">42–45 min</span>
+        </div>
+
+    </div>
+
+    <!-- KLEUR LEGENDA -->
+    <div class="legenda">
+        <div class="legenda-item"><div class="legenda-dot" style="background:var(--blauw);"></div> Begrijpen</div>
+        <div class="legenda-item"><div class="legenda-dot" style="background:var(--goud);"></div> Toepassen</div>
+        <div class="legenda-item"><div class="legenda-dot" style="background:var(--oranje);"></div> Analyseren</div>
+    </div>
+
+</div>
+
+<script src="../js/sidebar.js"></script>
+<script>
+    LesZijbalk.init('lesoverzicht');
+
+    // ── DOCENT SESSION CHECK ─────────────────────────────
+    // Als docent al ingelogd via index.html, direct activeren
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            // Zet docentVrij globaal zodat bestaande modal-checks werken
+            window.docentVrij = true;
+            // Activeer antwoorden-knop als die bestaat
+            const btnA = document.getElementById('btn-antwoorden');
+            if (btnA) {
+                btnA.textContent = '🙈 Verberg antwoorden';
+                btnA.classList.add('actief');
+                document.body.classList.add('toon-antwoorden');
+            }
+        }
+    })();
+    document.body.style.paddingTop = '80px';
+
+    const btnBel = document.getElementById('btn-attentie');
+    let audioCtx = null;
+    btnBel.addEventListener('click', () => {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const speel = (freq, start, duur) => {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.frequency.value = freq; osc.type = 'sine';
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime + start);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duur);
+                osc.start(audioCtx.currentTime + start);
+                osc.stop(audioCtx.currentTime + start + duur + 0.1);
+            };
+            speel(880, 0, 0.35); speel(1100, 0.25, 0.35); speel(880, 0.5, 0.6);
+        } catch(e) {}
+        btnBel.classList.add('rinkelt');
+        setTimeout(() => btnBel.classList.remove('rinkelt'), 1400);
+    });
+</script>
+</body>
+</html>

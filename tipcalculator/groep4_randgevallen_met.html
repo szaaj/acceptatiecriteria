@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groep 4 — Randgevallen testen (met AC)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#faf8ff;--surf:#fff;--bord:#e2e8f0;--paars:#6d28d9;--paars-l:#ede9fe;--rood:#e63946;--rood-l:#ffe5e5;--groen:#2D6A4F;--groen-l:#D8F3DC;--goud:#f59e0b;--text:#1a202c;--dim:#6b7280;}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;padding:24px;}
+        @media print{.no-print{display:none!important}body{padding:10mm;background:white;}}
+        .doc-header{max-width:780px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:3px solid var(--paars);}
+        .doc-header h1{font-size:1.6rem;font-weight:800;}
+        .doc-header h1 span{color:var(--paars);}
+        .doc-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:4px;}
+        .groep-badge{font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;padding:6px 16px;border-radius:20px;background:var(--paars);color:white;letter-spacing:1px;}
+        .actie-balk{max-width:780px;margin:0 auto 16px;display:flex;gap:10px;}
+        .btn{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
+        .btn-print{background:var(--paars);color:white;}
+        .btn-check{background:var(--goud);color:white;}
+        .uitleg{max-width:780px;margin:0 auto 20px;background:var(--paars-l);border:1px solid rgba(109,40,217,0.3);border-left:5px solid var(--paars);border-radius:10px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.88rem;line-height:1.6;}
+        .uitleg strong{color:var(--paars);}
+        .test-kaart{max-width:780px;margin:0 auto 20px;background:var(--surf);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid var(--bord);}
+        .kaart-header{background:var(--paars-l);border-bottom:2px solid rgba(109,40,217,0.15);padding:16px 22px;}
+        .kaart-header h2{font-size:1.1rem;font-weight:800;color:var(--paars);}
+        .kaart-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:2px;}
+        .criteria-item{padding:18px 22px;border-bottom:1px solid var(--bord);}
+        .criteria-item:last-child{border-bottom:none;}
+        .ac-blok{font-family:'JetBrains Mono',monospace;font-size:0.9rem;background:var(--bg);padding:10px 14px;border-radius:8px;border-left:3px solid var(--paars);margin:10px 0;line-height:1.6;}
+        .ac-blok .kw{color:var(--paars);font-weight:700;}
+        .ac-blok .res{color:var(--groen);font-weight:700;}
+        .invoer-grid{display:grid;gap:8px;margin-top:8px;}
+        .invoer-rij{display:flex;align-items:center;gap:10px;}
+        .invoer-label{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);min-width:220px;flex-shrink:0;}
+        .invoer-veld{font-family:'JetBrains Mono',monospace;font-size:0.88rem;padding:7px 12px;border:2px solid var(--bord);border-radius:7px;background:white;color:var(--text);width:200px;outline:none;transition:border-color 0.15s;}
+        .invoer-veld:focus{border-color:var(--paars);}
+        .invoer-veld.correct{border-color:var(--groen);background:var(--groen-l);}
+        .invoer-veld.fout{border-color:var(--rood);background:var(--rood-l);}
+        .fb{font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:700;display:none;}
+        .fb.correct{color:var(--groen);display:inline;}
+        .fb.fout{color:var(--rood);display:inline;}
+        .voldoet-rij{display:flex;align-items:center;gap:12px;margin-top:10px;}
+        .voldoet-label{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;}
+        .radio-opties{display:flex;gap:10px;}
+        .radio-optie{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;cursor:pointer;}
+        .radio-optie input{cursor:pointer;accent-color:var(--paars);}
+        .fout-melding{max-width:780px;margin:0 auto 16px;background:var(--rood-l);border:1px solid var(--rood);border-radius:10px;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--rood);display:none;}
+        .code-sectie{max-width:780px;margin:0 auto 20px;background:var(--surf);border:2px solid var(--paars);border-radius:14px;padding:28px;text-align:center;display:none;}
+        .code-sectie h2{font-size:1.3rem;font-weight:800;color:var(--paars);margin-bottom:8px;}
+        .code-sectie p{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--dim);margin-bottom:16px;}
+        .spelcode{font-family:'JetBrains Mono',monospace;font-size:3.5rem;font-weight:900;letter-spacing:14px;color:var(--paars);background:var(--paars-l);padding:18px 36px;border-radius:12px;display:inline-block;border:2px dashed var(--paars);margin-bottom:12px;}
+    </style>
+</head>
+<body>
+
+<div class="doc-header">
+    <div>
+        <h1>TipSplit <span>Randgevallen testen</span></h1>
+        <p>Groep 4 · Met acceptatiecriteria · Test stap voor stap</p>
+    </div>
+    <span class="groep-badge">GROEP 4</span>
+</div>
+
+<div class="actie-balk no-print">
+    <a href="../../index.html" style="text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 16px;border-radius:8px;border:1px solid #1e2330;background:#12151c;color:#5a6278;display:inline-flex;align-items:center;gap:6px;">🏠 Home</a>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Afdrukken</button>
+    <button class="btn btn-check" onclick="controleerAlles()">✅ Controleer &amp; krijg spelcode</button>
+</div>
+
+<div class="uitleg">
+    <strong>Opdracht:</strong> Test TipSplit met de acceptatiecriteria hieronder. Voer precies in wat er staat, noteer wat TipSplit toont en beoordeel of het voldoet. Bespreek daarna met Groep 3 wat jullie gevonden hebben.
+</div>
+
+<div class="fout-melding" id="fout-melding">❌ Nog niet alle antwoorden kloppen. Controleer de rode velden.</div>
+
+<!-- AC 1: 0 personen -->
+<div class="test-kaart">
+    <div class="kaart-header">
+        <h2>Acceptatiecriterium 1</h2>
+        <p>Nul personen — wat verwachten we?</p>
+    </div>
+    <div class="criteria-item">
+        <div class="ac-blok">
+            <span class="kw">Als</span> een gebruiker 0 personen invoert en berekent,<br>
+            <span class="kw">dan</span> toont TipSplit een <span class="res">foutmelding</span> of blokkeert de berekening
+        </div>
+        <div class="invoer-grid">
+            <div class="invoer-rij">
+                <span class="invoer-label">Wat toont TipSplit bij 0 personen?</span>
+                <input class="invoer-veld" id="v1a" type="text" placeholder="bijv. ∞ of foutmelding" data-antwoord="∞">
+                <span class="fb" id="fb-v1a"></span>
+            </div>
+        </div>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Voldoet aan het criterium?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="r1" value="nee"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="r1" value="ja"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="r1" value="deels"> Deels</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AC 2: negatief bedrag -->
+<div class="test-kaart">
+    <div class="kaart-header">
+        <h2>Acceptatiecriterium 2</h2>
+        <p>Negatief bedrag — validatie</p>
+    </div>
+    <div class="criteria-item">
+        <div class="ac-blok">
+            <span class="kw">Als</span> een gebruiker een negatief bedrag (bijv. -50) invoert,<br>
+            <span class="kw">dan</span> toont TipSplit een <span class="res">foutmelding</span> en blokkeert de berekening
+        </div>
+        <div class="invoer-grid">
+            <div class="invoer-rij">
+                <span class="invoer-label">Wat doet TipSplit bij -50?</span>
+                <input class="invoer-veld" id="v2a" type="text" placeholder="bijv. rekent door" data-antwoord="rekent" data-bevat="true">
+                <span class="fb" id="fb-v2a"></span>
+            </div>
+        </div>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Voldoet aan het criterium?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="r2" value="nee"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="r2" value="ja"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="r2" value="deels"> Deels</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AC 3: custom percentage veld -->
+<div class="test-kaart">
+    <div class="kaart-header">
+        <h2>Acceptatiecriterium 3</h2>
+        <p>Custom percentage — UX gedrag</p>
+    </div>
+    <div class="criteria-item">
+        <div class="ac-blok">
+            <span class="kw">Als</span> een gebruiker "Anders%" selecteert, een getal invult, en daarna op 10% klikt,<br>
+            <span class="kw">dan</span> verdwijnt het custom invoerveld <span class="res">automatisch</span>
+        </div>
+        <div class="invoer-grid">
+            <div class="invoer-rij">
+                <span class="invoer-label">Verdwijnt het custom veld?</span>
+                <input class="invoer-veld" id="v3a" type="text" placeholder="ja of nee" data-antwoord="nee">
+                <span class="fb" id="fb-v3a"></span>
+            </div>
+        </div>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Voldoet aan het criterium?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="r3" value="nee"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="r3" value="ja"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="r3" value="deels"> Deels</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Conclusie -->
+<div class="test-kaart">
+    <div class="kaart-header"><h2>Conclusie Groep 4</h2></div>
+    <div class="criteria-item">
+        <div class="invoer-grid">
+            <div class="invoer-rij">
+                <span class="invoer-label">Hoeveel criteria falen?</span>
+                <input class="invoer-veld" id="v4a" type="text" placeholder="bijv. 3" data-antwoord="3" style="width:80px;">
+                <span class="fb" id="fb-v4a"></span>
+            </div>
+            <div class="invoer-rij">
+                <span class="invoer-label">Welk randgeval vond je het ernstigst?</span>
+                <input class="invoer-veld" id="v4b" type="text" placeholder="bijv. nul personen" data-antwoord="persoon" data-bevat="true" style="width:240px;">
+                <span class="fb" id="fb-v4b"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="code-sectie" id="code-sectie">
+    <h2>🎉 Alle antwoorden correct!</h2>
+    <p>Jullie hebben alle randgevallen getest. Spelcode:</p>
+    <div class="spelcode">BUG42</div>
+</div>
+
+<script>
+    const JUISTE_RADIOS = { r1:'nee', r2:'nee', r3:'nee' };
+    function check(el) {
+        const ant=el.dataset.antwoord; const bevat=el.dataset.bevat==='true';
+        const val=el.value.trim(); const fb=document.getElementById('fb-'+el.id);
+        const ok=bevat?val.toLowerCase().includes(ant.toLowerCase()):val.toLowerCase()===ant.toLowerCase();
+        el.classList.toggle('correct',ok); el.classList.toggle('fout',!ok&&val!=='');
+        if(fb){fb.className='fb '+(ok?'correct':val?'fout':''); fb.textContent=ok?'✓':val?'✗':'';}
+        return ok;
+    }
+    function controleerAlles() {
+        let ok=true;
+        document.querySelectorAll('.invoer-veld').forEach(v=>{if(!check(v))ok=false;});
+        Object.entries(JUISTE_RADIOS).forEach(([n,j])=>{const s=document.querySelector(`input[name="${n}"]:checked`);if(!s||s.value!==j)ok=false;});
+        document.getElementById('fout-melding').style.display=ok?'none':'block';
+        const cs=document.getElementById('code-sectie'); cs.style.display=ok?'block':'none';
+        if(ok)cs.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    document.querySelectorAll('.invoer-veld').forEach(v=>v.addEventListener('blur',()=>check(v)));
+</script>
+</body>
+</html>

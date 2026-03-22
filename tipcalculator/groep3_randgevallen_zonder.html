@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groep 3 — Randgevallen testen (zonder AC)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#faf8ff;--surf:#fff;--bord:#e2e8f0;--paars:#6d28d9;--paars-l:#ede9fe;--rood:#e63946;--rood-l:#ffe5e5;--goud:#f59e0b;--text:#1a202c;--dim:#6b7280;}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;padding:24px;}
+        @media print{.no-print{display:none!important}body{padding:10mm;background:white;}}
+        .doc-header{max-width:780px;margin:0 auto 20px;display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:14px;border-bottom:3px solid var(--paars);}
+        .doc-header h1{font-size:1.6rem;font-weight:800;}
+        .doc-header h1 span{color:var(--paars);}
+        .doc-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:4px;}
+        .groep-badge{font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:700;padding:6px 16px;border-radius:20px;background:var(--paars);color:white;letter-spacing:1px;}
+        .actie-balk{max-width:780px;margin:0 auto 16px;display:flex;gap:10px;}
+        .btn{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
+        .btn-print{background:var(--paars);color:white;}
+        .uitleg{max-width:780px;margin:0 auto 20px;background:var(--paars-l);border:1px solid rgba(109,40,217,0.3);border-left:5px solid var(--paars);border-radius:10px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.88rem;line-height:1.6;}
+        .uitleg strong{color:var(--paars);}
+        .test-kaart{max-width:780px;margin:0 auto 20px;background:var(--surf);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid var(--bord);}
+        .kaart-header{background:var(--paars-l);border-bottom:2px solid rgba(109,40,217,0.15);padding:16px 22px;}
+        .kaart-header h2{font-size:1.1rem;font-weight:800;color:var(--paars);}
+        .kaart-header p{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--dim);margin-top:2px;}
+        .test-item{padding:18px 22px;border-bottom:1px solid var(--bord);}
+        .test-item:last-child{border-bottom:none;}
+        .test-vraag{font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--text);line-height:1.6;background:var(--bg);padding:10px 14px;border-radius:8px;margin:10px 0;border-left:3px solid var(--paars);}
+        .invoer-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--dim);display:block;margin-bottom:4px;}
+        textarea{width:100%;min-height:60px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;padding:10px;border:2px solid var(--bord);border-radius:8px;background:white;resize:vertical;outline:none;}
+        textarea:focus{border-color:var(--paars);}
+        .voldoet-rij{display:flex;align-items:center;gap:12px;margin-top:10px;}
+        .voldoet-label{font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;}
+        .radio-opties{display:flex;gap:10px;}
+        .radio-optie{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;cursor:pointer;}
+        .radio-optie input{cursor:pointer;accent-color:var(--paars);}
+        .conclusie-blok{max-width:780px;margin:0 auto 20px;background:var(--surf);border:1px solid var(--bord);border-radius:14px;padding:20px 24px;}
+        .conclusie-blok h3{font-size:1.1rem;font-weight:800;color:var(--paars);margin-bottom:12px;}
+        .conclusie-blok textarea{min-height:80px;}
+    </style>
+</head>
+<body>
+
+<div class="doc-header">
+    <div>
+        <h1>TipSplit <span>Randgevallen testen</span></h1>
+        <p>Groep 3 · Zonder acceptatiecriteria · Probeer rare invoer</p>
+    </div>
+    <span class="groep-badge">GROEP 3</span>
+</div>
+
+<div class="actie-balk no-print">
+    <a href="../../index.html" style="text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;padding:9px 16px;border-radius:8px;border:1px solid #1e2330;background:#12151c;color:#5a6278;display:inline-flex;align-items:center;gap:6px;">🏠 Home</a>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Afdrukken</button>
+</div>
+
+<div class="uitleg">
+    <strong>Opdracht:</strong> Test TipSplit met rare of onverwachte invoer — geen lijst van criteria. Probeer dingen die normaal niet zouden moeten werken. Noteer wat je ziet. Bespreek daarna met Groep 4 wat jullie gevonden hebben.
+</div>
+
+<div class="test-kaart">
+    <div class="kaart-header">
+        <h2>Test 1 — Rare invoer</h2>
+        <p>Wat gebeurt er als je iets onverwachts invoert?</p>
+    </div>
+
+    <div class="test-item">
+        <strong>Probeer: 0 personen</strong>
+        <div class="test-vraag">Stel het aantal personen in op 0 en bereken</div>
+        <label class="invoer-label">Wat toont TipSplit?</label>
+        <textarea placeholder="Schrijf precies op wat je ziet..."></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Is dit goed?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v1"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v1"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v1"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-item">
+        <strong>Probeer: negatief bedrag</strong>
+        <div class="test-vraag">Voer -50 in als bedrag</div>
+        <label class="invoer-label">Wat toont TipSplit?</label>
+        <textarea placeholder="Schrijf precies op wat je ziet..."></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Is dit goed?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v2"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v2"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v2"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-item">
+        <strong>Probeer: "Anders%" percentage</strong>
+        <div class="test-vraag">Kies "Anders%" → type een getal → klik daarna op 10%</div>
+        <label class="invoer-label">Verdwijnt het invoerveld?</label>
+        <textarea placeholder="Wat zie je?"></textarea>
+        <div class="voldoet-rij">
+            <span class="voldoet-label">Is dit goed?</span>
+            <div class="radio-opties">
+                <label class="radio-optie"><input type="radio" name="v3"> Ja</label>
+                <label class="radio-optie"><input type="radio" name="v3"> Nee</label>
+                <label class="radio-optie"><input type="radio" name="v3"> Weet niet</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="conclusie-blok">
+    <h3>Jouw conclusie</h3>
+    <label class="invoer-label">Wat heb je gevonden? Welke randgevallen werken niet goed?</label>
+    <textarea placeholder="Schrijf hier je bevindingen..."></textarea>
+    <label class="invoer-label" style="margin-top:12px;">Hoe moeilijk was het om te zeggen of iets "goed" is zonder criteria?</label>
+    <textarea placeholder="Was het makkelijk of moeilijk? Waarom?"></textarea>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TipSplit — Reken je fooi uit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-wrapper">
+
+        <header class="app-header">
+            <div class="logo">💸 TipSplit</div>
+            <p class="tagline">Nooit meer ruzie over de rekening</p>
+        </header>
+
+        <main class="calculator">
+
+            <!-- STAP 1: Bedrag -->
+            <div class="step-card" id="card-amount">
+                <div class="step-label">STAP 1</div>
+                <label class="field-label" for="input-amount">Totaal bedrag (€)</label>
+                <div class="input-row">
+                    <span class="prefix">€</span>
+                    <input type="number" id="input-amount" placeholder="0.00" min="0" step="0.01">
+                </div>
+            </div>
+
+            <!-- STAP 2: Fooi % -->
+            <div class="step-card" id="card-tip">
+                <div class="step-label">STAP 2</div>
+                <label class="field-label">Kies je fooi percentage</label>
+                <div class="tip-buttons">
+                    <button class="tip-btn" data-tip="0">0%</button>
+                    <button class="tip-btn active" data-tip="10">10%</button>
+                    <button class="tip-btn" data-tip="15">15%</button>
+                    <button class="tip-btn" data-tip="20">20%</button>
+                    <button class="tip-btn custom-btn" data-tip="custom">Anders</button>
+                </div>
+                <div class="custom-tip-row" id="custom-tip-row" style="display:none;">
+                    <input type="number" id="input-custom-tip" placeholder="bijv. 12" min="0" max="100">
+                    <span class="suffix">%</span>
+                </div>
+            </div>
+
+            <!-- STAP 3: Personen -->
+            <div class="step-card" id="card-people">
+                <div class="step-label">STAP 3</div>
+                <label class="field-label">Aantal personen</label>
+                <div class="people-row">
+                    <button class="counter-btn" id="btn-minus">−</button>
+                    <span class="people-count" id="people-count">2</span>
+                    <button class="counter-btn" id="btn-plus">+</button>
+                </div>
+            </div>
+
+            <!-- BEREKEN KNOP -->
+            <button class="btn-calculate" id="btn-calculate">Bereken 💰</button>
+
+            <!-- RESULTAAT -->
+            <div class="result-card" id="result-card" style="display:none;">
+                <div class="result-row">
+                    <span class="result-label">Rekening</span>
+                    <span class="result-value" id="res-bill">€0.00</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Fooi (<span id="res-tip-pct">10</span>%)</span>
+                    <span class="result-value" id="res-tip">€0.00</span>
+                </div>
+                <div class="result-row total-row">
+                    <span class="result-label">Totaal</span>
+                    <span class="result-value" id="res-total">€0.00</span>
+                </div>
+                <div class="divider"></div>
+                <div class="result-row highlight-row">
+                    <span class="result-label">Per persoon</span>
+                    <span class="result-value big" id="res-per-person">€0.00</span>
+                </div>
+                <p class="result-note" id="result-note"></p>
+            </div>
+
+            <!-- RESET -->
+            <button class="btn-reset" id="btn-reset" style="display:none;">↺ Opnieuw</button>
+
+        </main>
+
+        <footer class="app-footer">
+            <p>TipSplit v1.0 — Gemaakt voor het testen van software 🧪</p>
+        </footer>
+
+    </div>
+
+    <script src="calculator.js"></script>
+</body>
+</html>

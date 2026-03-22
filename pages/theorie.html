@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theorie — Acceptatiecriteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #0a0c10;
+            --surface:   #12151c;
+            --border:    #1e2330;
+            --groen:     #00c07a;
+            --groen-dim: #061a10;
+            --oranje:    #ff6b35;
+            --blauw:     #4facfe;
+            --blauw-dim: #061627;
+            --paars:     #a78bfa;
+            --goud:      #fbbf24;
+            --rood:      #ff4757;
+            --text:      #eef0f6;
+            --dim:       #5a6278;
+            --sans:      'Syne', sans-serif;
+            --mono:      'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 96px 48px 100px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,192,122,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,192,122,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── TOP BALK ──────────────────────────────── */
+        .top-balk {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 52px;
+            background: rgba(10,12,16,0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
+            z-index: 200;
+        }
+
+        .top-btn {
+            font-family: var(--mono);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--dim);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.15s;
+        }
+
+        .top-btn:hover { border-color: var(--groen); color: var(--groen); }
+        .top-scheider  { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel     { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        /* ── VOORTGANG ─────────────────────────────── */
+        .voortgang-balk {
+            position: fixed;
+            top: 52px; left: 0; right: 0;
+            height: 3px;
+            background: var(--border);
+            z-index: 199;
+        }
+
+        .voortgang-vul {
+            height: 100%;
+            background: var(--blauw);
+            transition: width 0.4s ease;
+        }
+
+        /* Sectie tabs */
+        .sectie-tabs {
+            position: fixed;
+            top: 55px; left: 0; right: 0;
+            display: flex;
+            z-index: 198;
+            height: 30px;
+        }
+
+        .sectie-tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--dim);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .sectie-tab.actief.us    { color: var(--oranje);  border-bottom-color: var(--oranje);  background: rgba(255,107,53,0.05); }
+        .sectie-tab.actief.ac    { color: var(--groen);   border-bottom-color: var(--groen);   background: rgba(0,192,122,0.05); }
+
+        .slide-nr-blok {
+            position: fixed;
+            top: 88px; right: 24px;
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--dim);
+            z-index: 197;
+            letter-spacing: 2px;
+        }
+
+        /* ── SLIDES ────────────────────────────────── */
+        .slides {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            gap: 22px;
+            animation: slideIn 0.3s ease both;
+        }
+
+        .slide.actief { display: flex; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── BADGES ────────────────────────────────── */
+        .badge {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+
+        .badge-us    { background: rgba(255,107,53,0.1);  color: var(--oranje); border: 1px solid rgba(255,107,53,0.25); }
+        .badge-ac    { background: rgba(0,192,122,0.1);   color: var(--groen);  border: 1px solid rgba(0,192,122,0.25); }
+        .badge-sub   { background: rgba(255,255,255,0.05); color: var(--dim);    border: 1px solid var(--border); }
+
+        /* ── TITELS ────────────────────────────────── */
+        .slide h1 {
+            font-size: clamp(2rem, 3.8vw, 3rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+        }
+
+        .slide h2 {
+            font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .slide h1 em, .slide h2 em { font-style: normal; }
+        .us-slide  h1 em, .us-slide  h2 em { color: var(--oranje); }
+        .ac-slide  h1 em, .ac-slide  h2 em { color: var(--groen); }
+
+        /* ── BLOKKEN ───────────────────────────────── */
+        .twee-kol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .drie-kol { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+        .blok {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .blok.groen-rand { border-top: 3px solid var(--groen); }
+        .blok.oranje-rand { border-top: 3px solid var(--oranje); }
+        .blok.blauw-rand  { border-top: 3px solid var(--blauw); }
+        .blok.rood-rand   { border-top: 3px solid var(--rood); }
+        .blok.goud-rand   { border-top: 3px solid var(--goud); }
+
+        .blok h3 {
+            font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+            font-weight: 800;
+        }
+
+        .blok p, .blok li {
+            font-family: var(--mono);
+            font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+            color: var(--dim);
+            line-height: 1.6;
+        }
+
+        .blok ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .blok ul li { padding-left: 18px; position: relative; color: var(--text); }
+        .blok.groen-rand  ul li::before { content: '→'; position: absolute; left: 0; color: var(--groen); font-weight: 700; }
+        .blok.oranje-rand ul li::before { content: '→'; position: absolute; left: 0; color: var(--oranje); font-weight: 700; }
+        .blok.blauw-rand  ul li::before { content: '→'; position: absolute; left: 0; color: var(--blauw); font-weight: 700; }
+        .blok.rood-rand   ul li::before { content: '→'; position: absolute; left: 0; color: var(--rood); font-weight: 700; }
+        .blok.goud-rand   ul li::before { content: '→'; position: absolute; left: 0; color: var(--goud); font-weight: 700; }
+
+        /* Definitie blok */
+        .definitie {
+            border-radius: 14px;
+            padding: 20px 26px;
+            font-family: var(--mono);
+            font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+            line-height: 1.7;
+        }
+
+        .definitie.groen { background: var(--groen-dim); border: 1px solid rgba(0,192,122,0.2); border-left: 5px solid var(--groen); }
+        .definitie.blauw { background: var(--blauw-dim); border: 1px solid rgba(79,172,254,0.2); border-left: 5px solid var(--blauw); }
+        .definitie strong.groen { color: var(--groen); }
+        .definitie strong.blauw { color: var(--blauw); }
+        .definitie strong.oranje { color: var(--oranje); }
+
+        /* User story blok */
+        .us-blok {
+            background: rgba(255,107,53,0.05);
+            border: 1px solid rgba(255,107,53,0.2);
+            border-radius: 14px;
+            padding: 20px 24px;
+            font-family: var(--mono);
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+            line-height: 1.7;
+        }
+
+        .us-blok .kw  { color: var(--oranje); font-weight: 700; }
+        .us-blok .var { color: var(--goud); }
+        .us-blok .doel { color: var(--groen); }
+
+        /* Format blok */
+        .format-blok {
+            background: var(--groen-dim);
+            border: 1px solid rgba(0,192,122,0.25);
+            border-radius: 14px;
+            padding: 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .format-label { font-family: var(--mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 3px; color: var(--groen); }
+
+        .format-tekst {
+            font-family: var(--mono);
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+            line-height: 1.6;
+        }
+
+        .format-tekst .kw  { color: var(--groen); font-weight: 700; }
+        .format-tekst .var { color: var(--goud); }
+
+        /* AC voorbeeld item */
+        .ac-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg);
+            border-radius: 10px;
+            font-family: var(--mono);
+            font-size: clamp(0.85rem, 1.2vw, 0.98rem);
+            line-height: 1.6;
+        }
+
+        .ac-item.groen-link { border-left: 3px solid var(--groen); }
+        .ac-item.rood-link  { border-left: 3px solid var(--rood); }
+        .ac-item .als   { color: var(--dim); }
+        .ac-item .actie { color: var(--goud); font-weight: 700; }
+        .ac-item .dan   { color: var(--dim); }
+        .ac-item .res   { color: var(--groen); font-weight: 700; }
+        .ac-item .fout  { color: var(--rood); font-weight: 700; }
+
+
+        /* ── ONTHUL KAARTEN ────────────────────────── */
+        .onthul-kaart {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 22px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .onthul-kaart:hover { border-color: var(--groen); transform: translateY(-1px); }
+        .onthul-kaart.geopend { border-color: var(--groen); border-left: 4px solid var(--groen); }
+
+        .onthul-hint {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--dim);
+            margin-top: 8px;
+        }
+
+        .onthul-kaart.geopend .onthul-hint { display: none; }
+
+        /* ── NAVIGATIE ─────────────────────────────── */
+        .nav-balk {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(10,12,16,0.97);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            padding: 12px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: 2px solid;
+            cursor: pointer;
+            transition: all 0.15s;
+            min-width: 140px;
+            text-align: center;
+            background: var(--surface);
+        }
+
+        #btn-vorige {
+            border-color: #eef0f6;
+            color: #eef0f6;
+            background: #1a1d27;
+        }
+
+        #btn-vorige:disabled {
+            border-color: #2a2d3a;
+            color: #4a5568;
+            opacity: 1;
+        }
+
+        #btn-vorige:hover:not(:disabled) { border-color: var(--blauw); color: var(--blauw); }
+
+        .nav-btn.volgende {
+            border-color: var(--blauw);
+            color: var(--blauw);
+            background: var(--blauw-dim);
+        }
+
+        .nav-btn.volgende:hover:not(:disabled) { background: var(--blauw); color: var(--bg); }
+
+        .nav-midden {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .nav-slide-nr    { font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--text); }
+        .nav-slide-titel { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); letter-spacing: 1px; }
+        .nav-hint        { font-family: var(--mono); font-size: 0.62rem; color: var(--border); letter-spacing: 1px; }
+
+        /* ── ATTENTIEKNOP ──────────────────────────── */
+        .btn-attentie {
+            position: fixed;
+            bottom: 76px; right: 24px;
+            width: 54px; height: 54px;
+            border-radius: 50%;
+            border: 2px solid var(--paars);
+            background: rgba(10,12,16,0.95);
+            color: var(--paars);
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: all 0.15s;
+        }
+
+        .btn-attentie:hover { background: var(--paars); color: var(--bg); transform: scale(1.08); }
+        .btn-attentie.rinkelt { animation: bel-pulse 0.4s ease infinite alternate; }
+
+        @keyframes bel-pulse {
+            from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+            to   { box-shadow: 0 0 0 14px rgba(167,139,250,0); }
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 90px 20px 100px; }
+            .twee-kol, .drie-kol { grid-template-columns: 1fr; }
+            .nav-balk { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BALK -->
+<div class="top-balk">
+    <a class="top-btn" href="../index.html">🏠 Home</a>
+    <div class="top-scheider"></div>
+    <span class="top-titel">THEORIE · Acceptatiecriteria</span>
+
+</div>
+
+<div class="voortgang-balk"><div class="voortgang-vul" id="voortgang"></div></div>
+
+<!-- SECTIE TABS -->
+<div class="sectie-tabs">
+    <div class="sectie-tab us"   id="tab-us">USER STORY</div>
+    <div class="sectie-tab ac"   id="tab-ac">ACCEPTATIECRITERIA</div>
+
+</div>
+
+<div class="slide-nr-blok" id="slide-nr-blok">1 / 4</div>
+<button class="btn-attentie" id="btn-attentie">&#128276;</button>
+
+<div class="slides">
+
+<!-- ═══ SLIDE 1: USER STORY ═══ -->
+<div class="slide us-slide actief" data-sectie="us">
+    <span class="badge badge-us">USER STORY</span>
+    <h1>Wat wil de <em>gebruiker?</em></h1>
+
+    <div class="us-blok">
+        <span class="kw">Als</span> <span class="var">[gebruiker]</span><br>
+        wil ik <span class="var">[actie]</span><br>
+        <span class="kw">zodat</span> <span class="var">[doel]</span>
+    </div>
+
+    <div class="us-blok" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.25);">
+        <span style="font-family:var(--mono);font-size:0.65rem;letter-spacing:2px;color:var(--dim);">VOORBEELD — PORTFOLIO</span><br><br>
+        <span class="kw">Als</span> bezoeker van mijn portfolio<br>
+        wil ik mijn projecten kunnen bekijken<br>
+        <span class="kw">zodat</span> ik mijn werk kan zien
+    </div>
+</div>
+
+<!-- ═══ SLIDE 2: WAT ZIJN AC? ═══ -->
+<div class="slide ac-slide" data-sectie="ac">
+    <span class="badge badge-ac">ACCEPTATIECRITERIA</span>
+    <h1>Wanneer is het <em>goed?</em></h1>
+
+    <div class="definitie groen" style="font-size:clamp(1.1rem,2vw,1.4rem);padding:24px 30px;">
+        Acceptatiecriteria = <strong class="groen">afspraken</strong> waaraan iets moet voldoen om <strong class="groen">goed</strong> te zijn
+    </div>
+    <div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.25);border-left:5px solid var(--oranje);border-radius:12px;padding:18px 24px;font-family:var(--mono);font-size:clamp(1rem,1.6vw,1.2rem);color:var(--text);line-height:1.6;">
+        Zonder acceptatiecriteria weet je niet wanneer software <strong style="color:var(--oranje);">'goed'</strong> is.
+    </div>
+
+    <div class="drie-kol">
+        <div class="blok groen-rand" style="align-items:center;text-align:center;padding:24px;">
+            <span style="font-size:2rem;">🎯</span>
+            <h3 style="color:var(--groen);font-size:clamp(1.1rem,1.8vw,1.4rem);">Concreet</h3>
+            <p style="font-size:clamp(0.88rem,1.2vw,1rem);">Geen vage woorden — precies beschreven</p>
+        </div>
+        <div class="blok groen-rand" style="align-items:center;text-align:center;padding:24px;">
+            <span style="font-size:2rem;">✅</span>
+            <h3 style="color:var(--groen);font-size:clamp(1.1rem,1.8vw,1.4rem);">Meetbaar</h3>
+            <p style="font-size:clamp(0.88rem,1.2vw,1rem);">Ja of nee — geen twijfel mogelijk</p>
+        </div>
+        <div class="blok groen-rand" style="align-items:center;text-align:center;padding:24px;">
+            <span style="font-size:2rem;">🧪</span>
+            <h3 style="color:var(--groen);font-size:clamp(1.1rem,1.8vw,1.4rem);">Testbaar</h3>
+            <p style="font-size:clamp(0.88rem,1.2vw,1rem);">Iedereen kan het uitvoeren en beoordelen</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 3: VOORBEELD BUG HUNT ═══ -->
+<div class="slide us-slide" data-sectie="us">
+    <span class="badge badge-us">VOORBEELD — BUG HUNT</span>
+    <h2>User story + <em>criteria</em></h2>
+
+    <div class="twee-kol">
+        <div>
+            <div style="font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:2px;color:var(--dim);margin-bottom:10px;">USER STORY</div>
+            <div class="us-blok">
+                <span class="kw">Als</span> speler<br>
+                wil ik de slang besturen met pijltjestoetsen<br>
+                <span class="kw">zodat</span> ik het spel kan spelen
+            </div>
+        </div>
+        <div>
+            <div style="font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:2px;color:var(--dim);margin-bottom:10px;">ACCEPTATIECRITERIA</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="ac-item groen-link">
+                    <span class="als">Als</span>&nbsp;speler op pijl omhoog drukt,<br>
+                    <span class="dan">dan</span> <span class="res">beweegt de slang omhoog</span>
+                </div>
+                <div class="ac-item groen-link">
+                    <span class="als">Als</span>&nbsp;speler een muur raakt,<br>
+                    <span class="dan">dan</span> <span class="res">verschijnt "Game Over"</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 4: VAN US NAAR CRITERIA ═══ -->
+<div class="slide ac-slide" data-sectie="ac">
+    <span class="badge badge-ac">VAN USER STORY NAAR CRITERIA</span>
+    <h2>Jij gaat nu <em>2 acceptatiecriteria voor TipSplit schrijven</em></h2>
+    <div style="font-family:var(--mono);font-size:clamp(0.9rem,1.3vw,1.05rem);color:var(--dim);line-height:1.6;padding:14px 20px;background:var(--surface);border-radius:10px;border-left:3px solid var(--groen);">Tot nu toe heb je gezien wat acceptatiecriteria doen — nu ga je ze <strong style="color:var(--groen);">zelf toepassen</strong>.<br><br>Schrijf <strong style="color:var(--groen);">2 acceptatiecriteria voor TipSplit</strong> en gebruik deze om te testen of het programma klopt.</div>
+
+    <div class="twee-kol">
+        <div>
+            <div style="font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:2px;color:var(--dim);margin-bottom:10px;">USER STORY</div>
+            <div class="us-blok">
+                <span class="kw">Als</span> gebruiker<br>
+                wil ik een bedrag en fooi invoeren<br>
+                <span class="kw">zodat</span> ik weet hoeveel ik moet betalen
+            </div>
+        </div>
+        <div>
+            <div style="font-family:var(--mono);font-size:0.68rem;font-weight:700;letter-spacing:2px;color:var(--dim);margin-bottom:10px;">ACCEPTATIECRITERIA</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="ac-item groen-link">
+                    <span class="als">Als</span>&nbsp;een gebruiker €100 invoert met 10% fooi,<br>
+                    <span class="dan">dan</span> <span class="res">toont TipSplit fooi = €10 en totaal = €110</span>
+                </div>
+                <div class="ac-item groen-link">
+                    <span class="als">Als</span>&nbsp;een gebruiker een ongeldig bedrag invoert,<br>
+                    <span class="dan">dan</span> <span class="res">geeft TipSplit een foutmelding</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Format groot onderaan -->
+    <div class="format-blok" style="margin-top:8px;">
+        <span class="format-label">HET FORMAT — ONTHOUD DIT</span>
+        <div class="format-tekst" style="font-size:clamp(1.2rem,2.2vw,1.6rem);">
+            <span class="kw">Als</span> <span class="var">[actie],</span><br>
+            <span class="kw">dan</span> <span class="var">[resultaat]</span>
+        </div>
+    </div>
+</div>
+
+
+
+</div><!-- /slides -->
+
+<!-- NAVIGATIEBALK -->
+<div class="nav-balk">
+    <button class="nav-btn" id="btn-vorige" disabled>&#9664; Vorige</button>
+    <div class="nav-midden">
+        <span class="nav-slide-nr" id="nav-nr">1 / 4</span>
+        <span class="nav-slide-titel" id="nav-titel">USER STORY</span>
+        <span class="nav-hint">← → of knoppen</span>
+    </div>
+    <button class="nav-btn volgende" id="btn-volgende">Volgende &#9654;</button>
+</div>
+
+<script src="../js/sidebar.js"></script>
+<script>
+    LesZijbalk.init('theorie');
+
+    // ── DOCENT SESSION CHECK ─────────────────────────────
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            window.docentVrij = true;
+        }
+    })();
+    document.body.style.paddingTop = '96px';
+
+    const slideTitels  = ['User Story','Wanneer is het goed?','Voorbeeld Bug Hunt','Van US naar criteria'];
+    const slideSectie  = ['us','ac','us','ac'];
+    const tabIds       = { us:'tab-us', ac:'tab-ac' };
+    const sectieKleur  = { us:'#ff6b35', ac:'#00c07a' };
+
+    const slides    = document.querySelectorAll('.slide');
+    const voortgang = document.getElementById('voortgang');
+    const slideNrBlok = document.getElementById('slide-nr-blok');
+    const navNr     = document.getElementById('nav-nr');
+    const navTitel  = document.getElementById('nav-titel');
+    const btnVorige = document.getElementById('btn-vorige');
+    const btnVolgende = document.getElementById('btn-volgende');
+    const totaal    = slides.length;
+    let huidig      = 0;
+
+    function gaNaar(idx) {
+        if (idx < 0 || idx >= totaal) return;
+        slides[huidig].classList.remove('actief');
+        huidig = idx;
+        slides[huidig].classList.add('actief');
+
+        const pct = ((huidig + 1) / totaal * 100);
+        voortgang.style.width = pct + '%';
+        voortgang.style.background = sectieKleur[slideSectie[huidig]] || '#4facfe';
+
+        slideNrBlok.textContent = `${huidig + 1} / ${totaal}`;
+        navNr.textContent       = `${huidig + 1} / ${totaal}`;
+        navTitel.textContent    = slideTitels[huidig];
+
+        btnVorige.disabled = huidig === 0;
+        btnVolgende.disabled = huidig === totaal - 1;
+        btnVolgende.textContent = huidig === totaal - 1 ? '✓ Klaar' : 'Volgende ▶';
+
+        Object.values(tabIds).forEach(id => document.getElementById(id)?.classList.remove('actief'));
+        document.getElementById(tabIds[slideSectie[huidig]])?.classList.add('actief');
+    }
+
+    btnVolgende.addEventListener('click', () => gaNaar(huidig + 1));
+    btnVorige.addEventListener('click',   () => gaNaar(huidig - 1));
+
+    window.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT') return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); gaNaar(huidig + 1); }
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); gaNaar(huidig - 1); }
+    });
+
+    // Attentieknop
+    const btnBel = document.getElementById('btn-attentie');
+    let audioCtx = null;
+
+    btnBel.addEventListener('click', e => {
+        e.stopPropagation();
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const speel = (freq, start, duur) => {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.frequency.value = freq; osc.type = 'sine';
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime + start);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duur);
+                osc.start(audioCtx.currentTime + start);
+                osc.stop(audioCtx.currentTime + start + duur + 0.1);
+            };
+            speel(880, 0, 0.35); speel(1100, 0.25, 0.35); speel(880, 0.5, 0.6);
+        } catch(e) {}
+        btnBel.classList.add('rinkelt');
+        setTimeout(() => btnBel.classList.remove('rinkelt'), 1400);
+    });
+
+
+
+    gaNaar(0);
+</script>
+</body>
+</html>

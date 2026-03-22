@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Hunt — Spel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0a0c10;
+            --surface: #12151c;
+            --border:  #1e2330;
+            --groen:   #00c07a;
+            --paars:   #a78bfa;
+            --text:    #eef0f6;
+            --dim:     #5a6278;
+            --mono:    'JetBrains Mono', monospace;
+            --sans:    'Syne', sans-serif;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── TOP BALK ──────────────────────────────────── */
+        .top-balk {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 52px;
+            background: rgba(10,12,16,0.97);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
+            z-index: 200;
+            flex-shrink: 0;
+        }
+
+        .top-btn {
+            font-family: var(--mono);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--dim);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.15s;
+        }
+
+        .top-btn:hover { border-color: var(--groen); color: var(--groen); }
+        .top-scheider  { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel     { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        /* ── IFRAME WRAPPER ──────────────────────────── */
+        .instructie-balk {
+            position: fixed;
+            top: 52px;
+            left: 0;
+            right: 0;
+            background: rgba(79,172,254,0.10);
+            border-bottom: 1px solid rgba(79,172,254,0.30);
+            color: #4facfe;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            text-align: center;
+            z-index: 150;
+        }
+
+        .spel-wrapper {
+            position: fixed;
+            top: 92px;
+            left: 0;   /* sidebar.js past dit aan */
+            right: 0;
+            bottom: 0;
+        }
+
+        .spel-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ── ATTENTIEKNOP ────────────────────────────── */
+        .btn-attentie {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--paars);
+            background: rgba(10,12,16,0.95);
+            color: var(--paars);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: all 0.15s;
+        }
+
+        .btn-attentie:hover { background: var(--paars); color: var(--bg); transform: scale(1.08); }
+        .btn-attentie.rinkelt { animation: bel-pulse 0.4s ease infinite alternate; }
+
+        @keyframes bel-pulse {
+            from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+            to   { box-shadow: 0 0 0 16px rgba(167,139,250,0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BALK -->
+    <div class="top-balk">
+        <a class="top-btn" href="../index.html">🏠 Home</a>
+        <div class="top-scheider"></div>
+        <span class="top-titel">🎮 BUG HUNT · Spel spelen</span>
+    </div>
+
+    <div class="instructie-balk">
+        Speel het spel en ontdek wat niet klopt. Wanneer weet je zeker dat iets fout is?
+    </div>
+
+    <!-- SPEL IN IFRAME -->
+    <div class="spel-wrapper" id="spel-wrapper">
+        <iframe src="../spel/index.html" id="spel-frame" title="Bug Hunt spel"></iframe>
+    </div>
+
+    <!-- ATTENTIEKNOP -->
+    <button class="btn-attentie" id="btn-attentie" title="Aandacht vragen">&#128276;</button>
+
+    <script src="../js/sidebar.js"></script>
+    <script>
+        // Init zijbalk
+        LesZijbalk.init('bughunt');
+
+    // ── DOCENT SESSION CHECK ─────────────────────────────
+    // Als docent al ingelogd via index.html, direct activeren
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            // Zet docentVrij globaal zodat bestaande modal-checks werken
+            window.docentVrij = true;
+            // Activeer antwoorden-knop als die bestaat
+            const btnA = document.getElementById('btn-antwoorden');
+            if (btnA) {
+                btnA.textContent = '🙈 Verberg antwoorden';
+                btnA.classList.add('actief');
+                document.body.classList.add('toon-antwoorden');
+            }
+        }
+    })();
+
+        // Pas iframe left aan na sidebar init
+        const wrapper = document.getElementById('spel-wrapper');
+        const sidebar = document.getElementById('les-sidebar');
+        if (sidebar) {
+            const breedte = sidebar.offsetWidth;
+            wrapper.style.left = breedte + 'px';
+        }
+
+        // Attentieknop geluid
+        const btn = document.getElementById('btn-attentie');
+        let audioCtx = null;
+        btn.addEventListener('click', () => {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const speel = (freq, start, duur) => {
+                    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.frequency.value = freq; osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.7, audioCtx.currentTime + start);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duur);
+                    osc.start(audioCtx.currentTime + start);
+                    osc.stop(audioCtx.currentTime + start + duur + 0.1);
+                };
+                speel(880, 0, 0.35); speel(1100, 0.25, 0.35); speel(880, 0.5, 0.6);
+            } catch(e) {}
+            btn.classList.add('rinkelt');
+            setTimeout(() => btn.classList.remove('rinkelt'), 1400);
+        });
+    </script>
+</body>
+</html>

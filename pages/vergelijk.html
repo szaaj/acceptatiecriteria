@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nabespreking — Acceptatiecriteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #0a0c10;
+            --surface:   #12151c;
+            --border:    #1e2330;
+            --groen:     #00c07a;
+            --groen-dim: #061a10;
+            --oranje:    #ff6b35;
+            --oranje-dim:#1f0c06;
+            --blauw:     #4facfe;
+            --paars:     #a78bfa;
+            --goud:      #fbbf24;
+            --rood:      #ff4757;
+            --rood-dim:  #1a0508;
+            --text:      #eef0f6;
+            --dim:       #5a6278;
+            --sans:      'Syne', sans-serif;
+            --mono:      'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 48px 100px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,107,53,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,107,53,0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── TOP BALK ──────────────────────────────── */
+        .top-balk {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px;
+            background: rgba(10,12,16,0.97); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 20px; z-index: 200;
+        }
+        .top-btn {
+            font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+            padding: 7px 16px; border-radius: 7px;
+            border: 1px solid var(--border); background: var(--surface);
+            color: var(--dim); cursor: pointer; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s;
+        }
+        .top-btn:hover { border-color: var(--groen); color: var(--groen); }
+        .top-scheider  { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel     { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        /* ── VOORTGANG ─────────────────────────────── */
+        .voortgang-balk { position: fixed; top: 52px; left: 0; right: 0; height: 4px; background: var(--border); z-index: 199; }
+        .voortgang-vul  { height: 100%; background: var(--oranje); transition: width 0.4s ease; }
+        .stap-indicator { position: fixed; top: 60px; right: 24px; font-family: var(--mono); font-size: 0.78rem; color: var(--dim); z-index: 199; letter-spacing: 2px; }
+
+        /* ── SLIDES ────────────────────────────────── */
+        .slides { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; justify-content: center; margin-top: 36px; }
+        .slide  { display: none; flex-direction: column; gap: 26px; animation: fadeIn 0.3s ease both; }
+        .slide.actief { display: flex; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ── LABELS ────────────────────────────────── */
+        .slide-label {
+            font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 3px; padding: 5px 16px; border-radius: 20px;
+            align-self: flex-start;
+            background: rgba(255,107,53,0.1); color: var(--oranje);
+            border: 1px solid rgba(255,107,53,0.2);
+        }
+
+        /* ── TITELS ────────────────────────────────── */
+        .slide h1 { font-size: clamp(2.2rem,4.5vw,3.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; }
+        .slide h2 { font-size: clamp(1.7rem,3vw,2.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.5px; }
+        .slide h1 em, .slide h2 em { font-style: normal; color: var(--oranje); }
+
+        /* ── TWEE KOL ──────────────────────────────── */
+        .twee-kol { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+        /* ── KAARTEN ───────────────────────────────── */
+        .kaart {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 22px 24px;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .kaart.groen-rand { border-top: 4px solid var(--groen); }
+        .kaart.rood-rand  { border-top: 4px solid var(--rood); }
+        .kaart-label {
+            font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 2px; padding: 4px 12px; border-radius: 20px; align-self: flex-start;
+        }
+        .label-groen { background: rgba(0,192,122,0.1); color: var(--groen); border: 1px solid rgba(0,192,122,0.2); }
+        .label-rood  { background: rgba(255,71,87,0.1);  color: var(--rood);  border: 1px solid rgba(255,71,87,0.2); }
+        .kaart h3 { font-size: clamp(1.05rem,1.6vw,1.3rem); font-weight: 800; }
+        .kaart ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .kaart ul li { font-family: var(--mono); font-size: clamp(0.9rem,1.2vw,1rem); padding-left: 20px; position: relative; color: var(--text); line-height: 1.5; }
+        .kaart.groen-rand ul li::before { content:'→'; position:absolute; left:0; color:var(--groen); font-weight:700; }
+        .kaart.rood-rand  ul li::before { content:'→'; position:absolute; left:0; color:var(--rood);  font-weight:700; }
+
+        /* ── KLIKBARE CRITERIA ─────────────────────── */
+        .criteria-klik {
+            background: var(--rood-dim); border: 2px solid rgba(255,71,87,0.35);
+            border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.2s;
+        }
+        .criteria-klik:hover { border-color: var(--rood); transform: translateY(-2px); }
+        .criteria-klik.onthult { border-color: var(--groen); background: var(--groen-dim); cursor: default; }
+
+        .criteria-klik-header {
+            padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .criteria-klik-label { font-family: var(--mono); font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; }
+        .criteria-klik .hint { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); }
+        .criteria-klik.onthult .hint { display: none; }
+        .criteria-klik.onthult .criteria-klik-header { background: rgba(0,192,122,0.08); }
+
+        .criteria-slecht { padding: 16px 22px; border-top: 1px solid rgba(255,71,87,0.2); }
+        .criteria-goed   { display: none; padding: 16px 22px; border-top: 1px solid rgba(0,192,122,0.2); background: rgba(0,192,122,0.04); }
+        .criteria-klik.onthult .criteria-goed { display: block; }
+
+        .criterium-tekst {
+            font-family: var(--mono); font-size: clamp(0.95rem,1.4vw,1.1rem);
+            line-height: 1.7; color: var(--text);
+        }
+        .criterium-tekst .kw-slecht { color: var(--rood);   font-weight: 700; }
+        .criterium-tekst .kw-goed   { color: var(--groen);  font-weight: 700; }
+        .criterium-tekst .kw-dan    { color: var(--goud);   font-weight: 700; }
+        .criterium-tekst .uitleg    { color: var(--dim); font-size: 0.88em; display: block; margin-top: 8px; }
+
+        /* ── CONCLUSIE ─────────────────────────────── */
+        .conclusie {
+            background: var(--surface); border: 1px solid var(--border);
+            border-left: 5px solid var(--oranje); border-radius: 14px;
+            padding: 20px 26px; font-family: var(--mono);
+            font-size: clamp(1rem,1.5vw,1.15rem); line-height: 1.7;
+        }
+        .conclusie strong { color: var(--oranje); }
+
+        /* ── NAVIGATIE ─────────────────────────────── */
+        .nav-balk {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(10,12,16,0.97); backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            padding: 12px 48px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 100; gap: 12px;
+        }
+        .nav-btn {
+            font-family: var(--mono); font-size: 1rem; font-weight: 700;
+            padding: 13px 30px; border-radius: 8px; border: 2px solid;
+            cursor: pointer; transition: all 0.15s; min-width: 150px; text-align: center;
+            background: var(--surface);
+        }
+        #btn-vorige { border-color: #eef0f6; color: #eef0f6; background: #1a1d27; }
+        #btn-vorige:disabled { border-color: #2a2d3a; color: #4a5568; }
+        #btn-vorige:hover:not(:disabled) { border-color: var(--oranje); color: var(--oranje); }
+        .nav-btn.volgende { border-color: var(--oranje); color: var(--oranje); background: var(--oranje-dim); }
+        .nav-btn.volgende:hover { background: var(--oranje); color: var(--bg); }
+        .nav-midden { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .nav-slide-nr    { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+        .nav-slide-titel { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); letter-spacing: 1px; }
+        .nav-hint        { font-family: var(--mono); font-size: 0.62rem; color: var(--border); }
+
+        /* ── ATTENTIEKNOP ──────────────────────────── */
+        .btn-attentie {
+            position: fixed; bottom: 78px; right: 24px;
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 2px solid var(--paars); background: rgba(10,12,16,0.95);
+            color: var(--paars); font-size: 1.4rem; cursor: pointer; z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4); transition: all 0.15s;
+        }
+        .btn-attentie:hover { background: var(--paars); color: var(--bg); transform: scale(1.08); }
+        .btn-attentie.rinkelt { animation: bel-pulse 0.4s ease infinite alternate; }
+        @keyframes bel-pulse {
+            from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+            to   { box-shadow: 0 0 0 16px rgba(167,139,250,0); }
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 20px 20px 100px; }
+            .twee-kol { grid-template-columns: 1fr; }
+            .nav-balk { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BALK -->
+<div class="top-balk">
+    <a class="top-btn" href="../index.html">🏠 Home</a>
+    <div class="top-scheider"></div>
+    <span class="top-titel">NABESPREKING · 32–42 min</span>
+</div>
+
+<div class="voortgang-balk"><div class="voortgang-vul" id="voortgang"></div></div>
+<div class="stap-indicator" id="stap-indicator">1 / 2</div>
+<button class="btn-attentie" id="btn-attentie">&#128276;</button>
+
+<div class="slides">
+
+<!-- ═══════ SLIDE 1: WAT VIEL OP? ══════════════════════ -->
+<div class="slide actief">
+    <span class="slide-label">NABESPREKING</span>
+    <h1>Wat viel op tijdens <em>het testen met jouw acceptatiecriteria?</em></h1>
+
+    <div class="twee-kol">
+        <div class="kaart groen-rand">
+            <span class="kaart-label label-groen">WAT WERKTE WEL?</span>
+            <h3 style="color:var(--groen);">Wat kon je makkelijk beoordelen?</h3>
+            <ul>
+                <li>Waar was je zeker van je antwoord?</li>
+                <li>Wat maakte het makkelijk?</li>
+            </ul>
+        </div>
+        <div class="kaart rood-rand">
+            <span class="kaart-label label-rood">WAT WERKTE NIET?</span>
+            <h3 style="color:var(--rood);">Waar twijfelde je?</h3>
+            <ul>
+                <li>Wanneer wist je niet of het "goed" was?</li>
+                <li>Wat had je nodig om zeker te zijn?</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="conclusie">
+        <strong>Kernvraag:</strong> Wat maakte beoordelen lastig? Wat had je nodig om zeker te weten of iets goed was?
+    </div>
+</div>
+
+<!-- ═══════ SLIDE 2: GOED VS SLECHT CRITERIUM ══════════ -->
+<div class="slide">
+    <span class="slide-label">ANALYSEREN</span>
+    <h2>Welke is beter — en waarom? <em>Is dit concreet en testbaar?</em></h2>
+
+    <div class="criteria-klik" onclick="onthulCriteria(this)">
+        <div class="criteria-klik-header">
+            <span class="criteria-klik-label" style="color:var(--rood);">❌ SLECHT CRITERIUM</span>
+            <span class="hint">👆 Klik om het goede criterium te zien</span>
+        </div>
+        <div class="criteria-slecht">
+            <div class="criterium-tekst">
+                <span class="kw-slecht">Als</span> ik een bedrag en fooi invoer,
+                <span class="kw-dan"> dan</span> rekent TipSplit het goed uit
+                <span class="uitleg">→ Wat is "goed"? Dit is niet testbaar — iedereen interpreteert het anders.</span>
+            </div>
+        </div>
+        <div class="criteria-goed">
+            <div class="criterium-tekst">
+                <span class="kw-goed">Als</span> ik €100 invoer met 10% fooi,
+                <span class="kw-dan"> dan</span> toont TipSplit fooi = €10.00 en totaal = €110.00
+                <span class="uitleg" style="color:var(--groen);">→ Concreet, meetbaar, testbaar — iedereen kan dit uitvoeren en beoordelen.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="conclusie">
+        Een goed acceptatiecriterium is <strong>concreet</strong>, <strong>meetbaar</strong> en <strong>testbaar</strong>.
+    </div>
+</div>
+
+</div><!-- /slides -->
+
+<!-- NAVIGATIEBALK -->
+<div class="nav-balk">
+    <button class="nav-btn" id="btn-vorige" disabled>&#9664; Vorige</button>
+    <div class="nav-midden">
+        <span class="nav-slide-nr" id="nav-nr">1 / 2</span>
+        <span class="nav-slide-titel" id="nav-titel">Wat viel op?</span>
+        <span class="nav-hint">← → of knoppen</span>
+    </div>
+    <button class="nav-btn volgende" id="btn-volgende">Volgende &#9654;</button>
+</div>
+
+<script src="../js/sidebar.js"></script>
+<script>
+    LesZijbalk.init('vergelijk');
+    document.body.style.paddingTop = '80px';
+
+    // ── DOCENT SESSION CHECK ─────────────────────────────
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            window.docentVrij = true;
+        }
+    })();
+
+    const slideTitels = ['Wat viel op?', 'Goed vs slecht criterium'];
+    const slides      = document.querySelectorAll('.slide');
+    const totaal      = slides.length;
+    let huidig        = 0;
+
+    function gaNaar(idx) {
+        if (idx < 0 || idx >= totaal) return;
+        slides[huidig].classList.remove('actief');
+        huidig = idx;
+        slides[huidig].classList.add('actief');
+        document.getElementById('voortgang').style.width = ((huidig + 1) / totaal * 100) + '%';
+        document.getElementById('stap-indicator').textContent = `${huidig + 1} / ${totaal}`;
+        document.getElementById('nav-nr').textContent    = `${huidig + 1} / ${totaal}`;
+        document.getElementById('nav-titel').textContent = slideTitels[huidig];
+        document.getElementById('btn-vorige').disabled   = huidig === 0;
+        document.getElementById('btn-volgende').textContent = huidig === totaal - 1 ? 'Klaar ✓' : 'Volgende ▶';
+        document.getElementById('btn-volgende').disabled = false;
+    }
+
+    document.getElementById('btn-volgende').addEventListener('click', () => gaNaar(huidig + 1));
+    document.getElementById('btn-vorige').addEventListener('click',   () => gaNaar(huidig - 1));
+    window.addEventListener('keydown', e => {
+        if (e.target.tagName === 'INPUT') return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); gaNaar(huidig + 1); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); gaNaar(huidig - 1); }
+    });
+
+    function onthulCriteria(kaart) { kaart.classList.add('onthult'); }
+
+    // Attentieknop
+    const btnBel = document.getElementById('btn-attentie');
+    let audioCtx = null;
+    btnBel.addEventListener('click', () => {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const speel = (freq, start, duur) => {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.frequency.value = freq; osc.type = 'sine';
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime + start);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duur);
+                osc.start(audioCtx.currentTime + start);
+                osc.stop(audioCtx.currentTime + start + duur + 0.1);
+            };
+            speel(880, 0, 0.35); speel(1100, 0.25, 0.35); speel(880, 0.5, 0.6);
+        } catch(e) {}
+        btnBel.classList.add('rinkelt');
+        setTimeout(() => btnBel.classList.remove('rinkelt'), 1400);
+    });
+
+    gaNaar(0);
+</script>
+</body>
+</html>

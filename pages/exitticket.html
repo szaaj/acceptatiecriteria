@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afsluiting — Acceptatiecriteria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #0a0c10;
+            --surface:   #12151c;
+            --border:    #1e2330;
+            --groen:     #00c07a;
+            --groen-dim: #061a10;
+            --oranje:    #ff6b35;
+            --blauw:     #4facfe;
+            --paars:     #a78bfa;
+            --goud:      #fbbf24;
+            --text:      #eef0f6;
+            --dim:       #5a6278;
+            --sans:      'Syne', sans-serif;
+            --mono:      'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 48px 60px;
+            gap: 28px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(0,192,122,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,192,122,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ── TOP BALK ──────────────────────────────── */
+        .top-balk {
+            position: fixed; top: 0; left: 0; right: 0; height: 52px;
+            background: rgba(10,12,16,0.97); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 20px; z-index: 200;
+        }
+
+        .top-btn {
+            font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+            padding: 7px 16px; border-radius: 7px;
+            border: 1px solid var(--border); background: var(--surface);
+            color: var(--dim); cursor: pointer; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s;
+        }
+        .top-btn:hover { border-color: var(--groen); color: var(--groen); }
+        .top-scheider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel    { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        /* ── CONTENT ───────────────────────────────── */
+        .content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 28px; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── HEADER ────────────────────────────────── */
+        .pagina-header {
+            display: flex; align-items: flex-start;
+            justify-content: space-between; gap: 20px;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .pagina-header h1 {
+            font-size: clamp(2rem, 3.8vw, 3rem);
+            font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+        }
+
+        .pagina-header h1 em { font-style: normal; color: var(--groen); }
+        .pagina-header p { font-family: var(--mono); font-size: 0.88rem; color: var(--dim); margin-top: 8px; }
+
+        .tijd-badge {
+            background: rgba(0,192,122,0.08); border: 1px solid rgba(0,192,122,0.2);
+            border-radius: 10px; padding: 12px 20px; text-align: center; flex-shrink: 0;
+        }
+        .tijd-badge .nr    { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--groen); display: block; }
+        .tijd-badge .label { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); letter-spacing: 2px; display: block; margin-top: 2px; }
+
+        /* ── SCHEIDER ──────────────────────────────── */
+        .scheider {
+            font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 3px; color: var(--dim);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .scheider::before, .scheider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        /* ── REFLECTIE ─────────────────────────────── */
+        .reflectie-blok {
+            background: var(--surface); border: 1px solid var(--border);
+            border-left: 5px solid var(--blauw); border-radius: 14px;
+            padding: 24px 28px; display: flex; flex-direction: column; gap: 14px;
+            animation: fadeUp 0.4s ease 0.1s both; opacity: 0;
+        }
+
+        .reflectie-blok .vraag {
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-weight: 800; line-height: 1.3; color: var(--text);
+        }
+
+        .reflectie-blok .vraag em { font-style: normal; color: var(--blauw); }
+
+        .antwoord-hints {
+            display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px;
+        }
+
+        .hint-chip {
+            font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+            padding: 6px 16px; border-radius: 20px; cursor: pointer;
+            border: 2px solid var(--border); color: var(--dim);
+            background: var(--bg); transition: all 0.15s; user-select: none;
+        }
+
+        .hint-chip:hover { border-color: var(--groen); color: var(--groen); }
+        .hint-chip.gekozen { background: var(--groen); color: var(--bg); border-color: var(--groen); }
+
+        /* ── EXIT TICKET ───────────────────────────── */
+        .exit-blok {
+            background: rgba(0,192,122,0.05); border: 2px solid rgba(0,192,122,0.25);
+            border-radius: 16px; padding: 28px 32px;
+            display: flex; flex-direction: column; gap: 18px;
+            animation: fadeUp 0.4s ease 0.2s both; opacity: 0;
+        }
+
+        .exit-label {
+            font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 3px; color: var(--groen);
+        }
+
+        .exit-opdracht {
+            font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+            font-weight: 800; line-height: 1.4; color: var(--text);
+        }
+
+        .exit-opdracht strong { color: var(--groen); }
+
+        .format-blok {
+            background: var(--groen-dim); border: 1px solid rgba(0,192,122,0.2);
+            border-radius: 12px; padding: 16px 22px;
+        }
+
+        .format-blok .format-label {
+            font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 3px; color: var(--groen); margin-bottom: 10px; display: block;
+        }
+
+        .format-tekst {
+            font-family: var(--mono);
+            font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.7;
+        }
+        .format-tekst .kw  { color: var(--groen); font-weight: 700; }
+        .format-tekst .var { color: var(--goud); }
+
+        /* ── LEERDOELEN CHECK ──────────────────────── */
+        .leerdoelen-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+            animation: fadeUp 0.4s ease 0.3s both; opacity: 0;
+        }
+
+        .ld-kaart {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px; padding: 18px 20px;
+            display: flex; flex-direction: column; gap: 10px; position: relative;
+        }
+
+        .ld-kaart::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 3px; border-radius: 14px 14px 0 0;
+        }
+
+        .ld-kaart.blauw::before  { background: var(--blauw); }
+        .ld-kaart.goud::before   { background: var(--goud); }
+        .ld-kaart.oranje::before { background: var(--oranje); }
+
+        .ld-bloom {
+            font-family: var(--mono); font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 2px; padding: 3px 10px; border-radius: 20px; align-self: flex-start;
+        }
+
+        .blauw  .ld-bloom { background: rgba(79,172,254,0.1);  color: var(--blauw); border: 1px solid rgba(79,172,254,0.2); }
+        .goud   .ld-bloom { background: rgba(251,191,36,0.1);  color: var(--goud);  border: 1px solid rgba(251,191,36,0.2); }
+        .oranje .ld-bloom { background: rgba(255,107,53,0.1);  color: var(--oranje);border: 1px solid rgba(255,107,53,0.2); }
+
+        .ld-tekst { font-family: var(--mono); font-size: clamp(0.82rem,1.1vw,0.95rem); color: var(--text); line-height: 1.6; }
+        .blauw  .ld-tekst strong { color: var(--blauw); }
+        .goud   .ld-tekst strong { color: var(--goud); }
+        .oranje .ld-tekst strong { color: var(--oranje); }
+
+        .schaal { display: flex; gap: 6px; margin-top: 6px; }
+        .schaal-stap {
+            flex: 1; height: 34px; border-radius: 6px;
+            border: 1px solid var(--border); display: flex; align-items: center;
+            justify-content: center; font-family: var(--mono); font-size: 0.78rem;
+            color: var(--dim); cursor: pointer; transition: all 0.15s;
+        }
+        .schaal-stap:hover { border-color: var(--groen); color: var(--groen); }
+        .schaal-stap.actief { font-weight: 700; }
+        .blauw  .schaal-stap.actief { background: var(--blauw);  color: var(--bg); border-color: var(--blauw); }
+        .goud   .schaal-stap.actief { background: var(--goud);   color: var(--bg); border-color: var(--goud); }
+        .oranje .schaal-stap.actief { background: var(--oranje); color: var(--bg); border-color: var(--oranje); }
+
+        /* ── TRANSFER ZIN ──────────────────────────── */
+        .transfer-blok {
+            background: rgba(0,192,122,0.04); border: 1px solid rgba(0,192,122,0.2);
+            border-radius: 14px; padding: 20px 28px;
+            font-family: var(--mono); font-size: clamp(1rem, 1.5vw, 1.15rem);
+            color: var(--text); line-height: 1.6;
+            animation: fadeUp 0.4s ease 0.4s both; opacity: 0;
+        }
+
+        .transfer-blok strong { color: var(--groen); }
+
+        /* ── ATTENTIEKNOP ──────────────────────────── */
+        .btn-attentie {
+            position: fixed; bottom: 24px; right: 24px;
+            width: 56px; height: 56px; border-radius: 50%;
+            border: 2px solid var(--paars); background: rgba(10,12,16,0.95);
+            color: var(--paars); font-size: 1.4rem; cursor: pointer; z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4); transition: all 0.15s;
+        }
+        .btn-attentie:hover { background: var(--paars); color: var(--bg); transform: scale(1.08); }
+        .btn-attentie.rinkelt { animation: bel-pulse 0.4s ease infinite alternate; }
+        @keyframes bel-pulse {
+            from { box-shadow: 0 0 0 0 rgba(167,139,250,0.5); }
+            to   { box-shadow: 0 0 0 16px rgba(167,139,250,0); }
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 70px 20px 60px; }
+            .leerdoelen-grid { grid-template-columns: 1fr; }
+            .pagina-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BALK -->
+<div class="top-balk">
+    <a class="top-btn" href="../index.html">🏠 Home</a>
+    <div class="top-scheider"></div>
+    <span class="top-titel">AFSLUITING · 42–45 min</span>
+</div>
+
+<button class="btn-attentie" id="btn-attentie">&#128276;</button>
+
+<div class="content">
+
+    <!-- HEADER -->
+    <div class="pagina-header">
+        <div>
+            <h1>Afsluiting van <em>de les</em></h1>
+            <p>Reflectie · Exit ticket · 3 minuten</p>
+        </div>
+        <div class="tijd-badge">
+            <span class="nr">3 min</span>
+            <span class="label">INDIVIDUEEL</span>
+        </div>
+    </div>
+
+    <!-- REFLECTIE — 1 vraag -->
+    <div class="scheider">REFLECTIE</div>
+
+    <div class="reflectie-blok">
+        <div class="vraag">Waar moet een goed acceptatiecriterium aan voldoen om <em>testbaar te zijn?</em></div>
+        <div class="antwoord-hints">
+            <div class="hint-chip" onclick="toggleChip(this)">Concreet</div>
+            <div class="hint-chip" onclick="toggleChip(this)">Meetbaar (ja/nee)</div>
+            <div class="hint-chip" onclick="toggleChip(this)">Testbaar</div>
+        </div>
+    </div>
+
+    <!-- EXIT TICKET -->
+    <div class="scheider">EXIT TICKET</div>
+
+    <div class="exit-blok">
+        <span class="exit-label">✍️ INDIVIDUEEL — SCHRIJF NU</span>
+        <div class="exit-opdracht">
+            Schrijf <strong>1 acceptatiecriterium</strong> in het Als/Dan-format voor jouw portfolio (bijv. projectenpagina), zoals je net hebt gedaan bij TipSplit (schrijven + testen).
+        </div>
+        <div class="format-blok">
+            <span class="format-label">FORMAT</span>
+            <div class="format-tekst">
+                <span class="kw">Als</span> <span class="var">[gebruiker] [actie] uitvoert,</span><br>
+                <span class="kw">dan</span> <span class="var">[verwacht gedrag van het systeem]</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRANSFER ZIN -->
+    <div class="transfer-blok">
+        💡 Dit is wat je straks nodig hebt voor je <strong>portfolio-opdracht</strong>.
+    </div>
+
+</div>
+
+<script src="../js/sidebar.js"></script>
+<script>
+    LesZijbalk.init('exit');
+
+    // ── DOCENT SESSION CHECK ─────────────────────────────
+    // Als docent al ingelogd via index.html, direct activeren
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            // Zet docentVrij globaal zodat bestaande modal-checks werken
+            window.docentVrij = true;
+            // Activeer antwoorden-knop als die bestaat
+            const btnA = document.getElementById('btn-antwoorden');
+            if (btnA) {
+                btnA.textContent = '🙈 Verberg antwoorden';
+                btnA.classList.add('actief');
+                document.body.classList.add('toon-antwoorden');
+            }
+        }
+    })();
+    document.body.style.paddingTop = '80px';
+
+    function toggleChip(el) { el.classList.toggle('gekozen'); }
+
+    function kiesSchaal(el, id) {
+        document.querySelectorAll(`#${id} .schaal-stap`).forEach(s => s.classList.remove('actief'));
+        el.classList.add('actief');
+    }
+
+    const btnBel = document.getElementById('btn-attentie');
+    let audioCtx = null;
+    btnBel.addEventListener('click', () => {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const speel = (freq, start, duur) => {
+                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.frequency.value = freq; osc.type = 'sine';
+                gain.gain.setValueAtTime(0.7, audioCtx.currentTime + start);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + duur);
+                osc.start(audioCtx.currentTime + start);
+                osc.stop(audioCtx.currentTime + start + duur + 0.1);
+            };
+            speel(880, 0, 0.35); speel(1100, 0.25, 0.35); speel(880, 0.5, 0.6);
+        } catch(e) {}
+        btnBel.classList.add('rinkelt');
+        setTimeout(() => btnBel.classList.remove('rinkelt'), 1400);
+    });
+</script>
+</body>
+</html>
