@@ -73,8 +73,16 @@ class LesSchema {
             onTick: ({ resterend, voortgang, secTotaal }) => {
                 // Update actieve fase ring
                 this._huidigeFase().updateTimer(resterend, voortgang);
-                // Update totale klok
-                if (this._klok) this._klok.textContent = Timer.formatTijd(secTotaal);
+                // Update totale klok — synchroon met localStorage (sidebar timer)
+                const start = parseInt(localStorage.getItem('les_timer_start') || Date.now());
+                const verlopen = Math.floor((Date.now() - start) / 1000);
+                const m = Math.floor(verlopen / 60);
+                const s = verlopen % 60;
+                if (this._klok) {
+                    this._klok.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+                    const pct = verlopen / (45 * 60);
+                    this._klok.style.color = pct < 0.6 ? '#00c07a' : pct < 0.85 ? '#fbbf24' : '#ff4757';
+                }
                 // Update actieve balk
                 this._updateActiefBalk(resterend);
             },

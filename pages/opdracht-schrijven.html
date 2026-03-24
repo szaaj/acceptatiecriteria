@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opdracht 1: AC schrijven</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0a0c10;
+            --surface: #12151c;
+            --border:  #1e2330;
+            --paars:   #a78bfa;
+            --groen:   #00c07a;
+            --goud:    #fbbf24;
+            --text:    #eef0f6;
+            --dim:     #5a6278;
+            --mono:    'JetBrains Mono', monospace;
+            --sans:    'Syne', sans-serif;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 80px 48px 60px; display: flex; flex-direction: column; gap: 24px; }
+
+        /* TOP BALK */
+        .top-balk { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10,12,16,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 0 20px; z-index: 200; }
+        .top-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 700; padding: 7px 16px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--dim); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s; }
+        .top-btn:hover { border-color: var(--paars); color: var(--paars); }
+        .top-scheider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        .content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+
+        /* HEADER */
+        .pagina-header h1 { font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 800; letter-spacing: -0.5px; }
+        .pagina-header h1 em { font-style: normal; color: var(--paars); }
+        .fase-badge { font-family: var(--mono); font-size: 0.72rem; font-weight: 700; padding: 4px 14px; border-radius: 20px; display: inline-block; margin-bottom: 10px; background: rgba(167,139,250,0.1); color: var(--paars); border: 1px solid rgba(167,139,250,0.25); }
+
+        /* BLOKKEN */
+        .blok { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; display: flex; flex-direction: column; gap: 10px; }
+        .blok.paars-rand { border-top: 4px solid var(--paars); }
+        .blok.groen-rand { border-top: 4px solid var(--groen); }
+        .blok.goud-rand  { border-top: 4px solid var(--goud); }
+        .blok h2 { font-size: clamp(1rem,1.6vw,1.2rem); font-weight: 800; }
+        .blok.paars-rand h2 { color: var(--paars); }
+        .blok.groen-rand h2 { color: var(--groen); }
+        .blok.goud-rand  h2 { color: var(--goud); }
+        .blok p, .blok li { font-family: var(--mono); font-size: clamp(0.88rem,1.2vw,1rem); color: var(--text); line-height: 1.6; }
+        .blok p.dim { color: var(--dim); }
+        .blok ul, .blok ol { margin-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+
+        /* FORMAT */
+        .format { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.2); border-radius: 10px; padding: 14px 18px; font-family: var(--mono); font-size: clamp(0.95rem,1.4vw,1.1rem); line-height: 1.7; }
+        .format .kw { color: var(--paars); font-weight: 700; }
+        .format .var { color: var(--goud); }
+
+        /* SCHRIJFRUIMTE */
+        .schrijfruimte { display: flex; flex-direction: column; gap: 12px; }
+        .schrijf-item { display: flex; align-items: flex-start; gap: 12px; }
+        .schrijf-nr { width: 32px; height: 32px; border-radius: 50%; background: rgba(167,139,250,0.15); color: var(--paars); font-family: var(--mono); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 4px; }
+        textarea { width: 100%; min-height: 64px; font-family: var(--mono); font-size: 0.9rem; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; outline: none; transition: border-color 0.15s; line-height: 1.6; }
+        textarea:focus { border-color: var(--paars); }
+        textarea::placeholder { color: var(--dim); }
+
+        /* VOLGENDE KNOP */
+        .volgende-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.95rem; font-weight: 700; padding: 13px 28px; border-radius: 10px; border: 2px solid var(--goud); background: rgba(251,191,36,0.08); color: var(--goud); text-decoration: none; transition: all 0.15s; align-self: flex-start; margin-top: 8px; }
+        .volgende-btn:hover { background: var(--goud); color: var(--bg); }
+
+        @media (max-width: 768px) { body { padding: 70px 20px 60px; } }
+ to { opacity:0.5; } }
+    </style>
+</head>
+<body>
+
+<div class="top-balk">
+    <a class="top-btn" href="../index.html">🏠 Home</a>
+    <div class="top-scheider"></div>
+    <span class="top-titel">OPDRACHT 1 · Tweetallen / individueel · 8–10 min</span>
+</div>
+
+<div class="content">
+
+    <div class="pagina-header">
+        <span class="fase-badge">TOEPASSEN</span>
+        <h1>Opdracht 1: <em>Acceptatiecriteria schrijven</em></h1>
+    </div>
+
+    <div class="blok paars-rand">
+        <h2>Jouw rol</h2>
+        <p>Je bent een tester. Je bepaalt wanneer de app goed werkt.</p>
+        <p class="dim">TipSplit is een app die een rekening verdeelt.<br>
+        Voorbeeld: €30 met 3 personen = €10 per persoon.</p>
+    </div>
+
+    <div class="blok paars-rand">
+        <h2>Opdracht</h2>
+        <p>Schrijf 2 acceptatiecriteria voor TipSplit in het Als/Dan-format.</p>
+        <div class="format">
+            <span class="kw">Als</span> <span class="var">[gebruiker] [actie] uitvoert,</span><br>
+            <span class="kw">dan</span> <span class="var">[verwacht gedrag van het programma]</span>
+        </div>
+        <p class="dim">Tip: gebruik de vraag — <strong style="color:var(--text);">Wat moet er precies gebeuren?</strong></p>
+    </div>
+
+
+
+
+    <div class="blok goud-rand">
+        <h2>Kies jouw niveau</h2>
+
+        <p><strong>Optie A (hulp):</strong></p>
+        <p>Kies 2 goede acceptatiecriteria en gebruik of pas ze aan:</p>
+        <ul>
+            <li>Als ik €50 invoer met 2 personen, dan toont de app €25 per persoon</li>
+            <li>Als ik een leeg veld laat, dan verschijnt een foutmelding</li>
+            <li>Als ik 10% fooi invoer bij €80, dan toont de app €8 fooi en €88 totaal</li>
+        </ul>
+
+        <p><strong>Optie B (standaard):</strong></p>
+        <p>Schrijf zelf 2 acceptatiecriteria.</p>
+
+        <p><strong>Optie C (uitdaging):</strong></p>
+        <p>Schrijf 3 acceptatiecriteria, inclusief één foutscenario (bijvoorbeeld leeg veld).</p>
+    </div>
+
+        <div class="blok paars-rand">
+        <h2>Schrijf hier je criteria</h2>
+        <div class="schrijfruimte">
+            <div class="schrijf-item">
+                <div class="schrijf-nr">1</div>
+                <textarea id="ac1" placeholder="Als ... , dan ..." oninput="slaOp()"></textarea>
+            </div>
+            <div class="schrijf-item">
+                <div class="schrijf-nr">2</div>
+                <textarea id="ac2" placeholder="Als ... , dan ..." oninput="slaOp()"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="blok groen-rand">
+        <h2>Controleer je criteria</h2>
+        <p>Kijk na of jouw acceptatiecriterium aan deze punten voldoet:</p>
+        <ul>
+            <li>Is het concreet?</li>
+            <li>Is het meetbaar (ja of nee)?</li>
+            <li>Kan iemand anders dit testen?</li>
+        </ul>
+    </div><a class="volgende-btn" href="opdracht-testen.html">Klaar? Ga testen ▶</a>
+
+</div>
+
+<script src="../js/sidebar.js"></script>
+<script>
+    LesZijbalk.init('schrijven');
+
+    // Sla op in localStorage + herstel bij laden
+    function slaOp() {
+        localStorage.setItem('ac1', document.getElementById('ac1').value);
+        localStorage.setItem('ac2', document.getElementById('ac2').value);
+    }
+    // Herstel bij laden
+    const ac1 = localStorage.getItem('ac1');
+    const ac2 = localStorage.getItem('ac2');
+    if (ac1) document.getElementById('ac1').value = ac1;
+    if (ac2) document.getElementById('ac2').value = ac2;
+    document.body.style.paddingTop = '80px';
+    (function() {
+        if (sessionStorage.getItem('docent') === 'true') {
+            document.body.classList.add('docent-actief');
+            window.docentVrij = true;
+        }
+    })();
+
+</script>
+</body>
+</html>

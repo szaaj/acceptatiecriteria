@@ -8,6 +8,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/schema.css">
+    <style>
+        .lesdoel-blok {
+            background: rgba(0,192,122,0.06);
+            border: 2px solid rgba(0,192,122,0.25);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 20px 0 10px 0;
+            font-family: 'DM Mono', monospace;
+        }
+        .lesdoel-blok h2 { margin-top: 0; font-size: 1.1rem; color: #00c07a; }
+        .lesdoel-blok h3 { font-size: 0.95rem; margin-top: 14px; color: #eef0f6; }
+        .lesdoel-blok p  { color: #aab4c8; font-size: 0.88rem; margin-bottom: 8px; }
+        .lesdoel-blok ul, .lesdoel-blok ol { margin: 0 0 0 20px; padding: 0; }
+        .lesdoel-blok li { color: #eef0f6; font-size: 0.88rem; margin-bottom: 4px; }
+ to { opacity:0.6; } }
+ to { opacity:0.5; } }
+
+        .les-header-midden { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 0 24px; }
+        .les-doel { font-size: 0.88rem; color: #9fb3c8; font-family: 'DM Mono', monospace; margin: 0; }
+        .les-doelen-klein { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .les-doelen-klein span { font-size: 0.78rem; padding: 4px 14px; border: 1px solid rgba(0,192,122,0.3); border-radius: 20px; color: #00c07a; background: rgba(0,192,122,0.07); font-family: 'DM Mono', monospace; font-weight: 700; letter-spacing: 1px; }
+        .les-flow-titel { font-size: 1rem; font-weight: 700; color: #eef0f6; margin-bottom: 4px; }
+        .les-flow-hint { font-size: 0.9rem; color: #9fb3c8; margin-bottom: 16px; }
+    </style>
     <link rel="stylesheet" href="css/modal.css">
 </head>
 <body>
@@ -31,11 +55,25 @@
                 <p class="les-sub">MBO-4 Software Developer &middot; 45 minuten</p>
             </div>
         </div>
+
+        <div class="les-header-midden">
+            <p class="les-doel">Vandaag leer je wanneer software goed is en hoe je dit test.</p>
+            <div class="les-doelen-klein">
+                <span>begrijpen</span>
+                <span>schrijven</span>
+                <span>testen</span>
+            </div>
+        </div>
+
         <div class="klok-blok">
             <div class="klok" id="klok">00:00</div>
             <div class="klok-label">verstreken tijd</div>
         </div>
     </header>
+
+    <h2 class="les-flow-titel">Lesverloop</h2>
+    <p class="les-flow-hint">Volg deze stappen tijdens de les</p>
+
     <div class="fasen-grid" id="fasen-grid"></div>
 </div>
 
@@ -47,6 +85,7 @@
     <button class="btn-ctrl btn-reset" id="btn-reset">&#8635; Reset</button>
     <button class="btn-ctrl btn-bel" id="btn-bel">&#128276; Aandacht</button>
     <button class="btn-ctrl btn-code" id="btn-code">&#128273; Code invoeren</button>
+    <button class="btn-ctrl" id="btn-timer-reset" onclick="localStorage.removeItem('les_timer_start');location.reload();" style="border-color:#ff4757;color:#ff4757;">&#9711; Start timer</button>
 </div>
 
 <!-- ── AUTH MODAL ─────────────────────────────────────── -->
@@ -65,12 +104,34 @@
 </div>
 
 <!-- ── SCRIPTS — volgorde is belangrijk ──────────────── -->
+
+<script>
+    // Timer wordt beheerd via sidebar.js (localStorage 'les_timer_start')
+    // Header klok: altijd synchroon met localStorage, onafhankelijk van fase
+    (function() {
+        const el = document.getElementById('klok');
+        if (!el) return;
+        function tick() {
+            const start = parseInt(localStorage.getItem('les_timer_start') || Date.now());
+            const verlopen = Math.floor((Date.now() - start) / 1000);
+            const m = Math.floor(verlopen / 60);
+            const s = verlopen % 60;
+            el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+            const pct = verlopen / (45 * 60);
+            el.style.color = pct < 0.6 ? '#00c07a' : pct < 0.85 ? '#fbbf24' : '#ff4757';
+        }
+        tick();
+        setInterval(tick, 1000);
+    })();
+</script>
 <script src="js/config.js"></script>
 <script src="js/Timer.js"></script>
 <script src="js/Fase.js"></script>
 <script src="js/AuthManager.js"></script>
 <script src="js/LesSchema.js"></script>
 <script src="js/main.js"></script>
+
+
 
 </body>
 </html>

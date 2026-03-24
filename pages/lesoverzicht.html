@@ -228,6 +228,20 @@
             .stap { grid-template-columns: 44px 1fr; }
             .stap-tijd { display: none; }
         }
+        .lesdoel-blok {
+            background: rgba(0,192,122,0.06);
+            border: 2px solid rgba(0,192,122,0.25);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 10px;
+            animation: fadeUp 0.4s ease 0.15s both; opacity: 0;
+        }
+        .lesdoel-blok h2 { margin-top: 0; font-size: 1.1rem; font-weight: 800; color: var(--groen); }
+        .lesdoel-blok h3 { font-size: 0.95rem; font-weight: 800; margin-top: 14px; color: var(--text); }
+        .lesdoel-blok p  { font-family: var(--mono); color: var(--dim); font-size: 0.88rem; margin-bottom: 8px; }
+        .lesdoel-blok ul, .lesdoel-blok ol { margin: 0 0 0 20px; padding: 0; }
+        .lesdoel-blok li { font-family: var(--mono); color: var(--text); font-size: 0.88rem; margin-bottom: 4px; }
+ to { opacity:0.5; } }
     </style>
 </head>
 <body>
@@ -278,6 +292,22 @@
 
     <!-- STAPPEN -->
     <div class="scheider">LESOPBOUW</div>
+
+    <section class="lesdoel-blok">
+        <h2>🎯 Doel van de les</h2>
+        <p>Na deze les kun jij:</p>
+        <ul>
+            <li>uitleggen wat acceptatiecriteria zijn (wanneer iets goed is)</li>
+            <li>zelf acceptatiecriteria schrijven</li>
+            <li>testen of iets goed werkt</li>
+        </ul>
+        <h3>Vandaag werk je in 3 stappen:</h3>
+        <ol>
+            <li>Begrijpen</li>
+            <li>Schrijven</li>
+            <li>Testen</li>
+        </ol>
+    </section>
 
     <div class="stappen">
 
@@ -406,6 +436,7 @@
         btnBel.classList.add('rinkelt');
         setTimeout(() => btnBel.classList.remove('rinkelt'), 1400);
     });
+
 </script>
 </body>
 </html>

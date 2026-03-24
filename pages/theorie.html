@@ -321,6 +321,8 @@
 
         .onthul-kaart:hover { border-color: var(--groen); transform: translateY(-1px); }
         .onthul-kaart.geopend { border-color: var(--groen); border-left: 4px solid var(--groen); }
+        .onthul-kaart.geopend .onthul-hint { display: none; }
+        .onthul-kaart.geopend .ac-item[style*="display:none"] { display: flex !important; }
 
         .onthul-hint {
             font-family: var(--mono);
@@ -426,6 +428,7 @@
             .twee-kol, .drie-kol { grid-template-columns: 1fr; }
             .nav-balk { padding: 12px 16px; }
         }
+ to { opacity:0.5; } }
     </style>
 </head>
 <body>
@@ -447,7 +450,7 @@
 
 </div>
 
-<div class="slide-nr-blok" id="slide-nr-blok">1 / 4</div>
+<div class="slide-nr-blok" id="slide-nr-blok">1 / 6</div>
 <button class="btn-attentie" id="btn-attentie">&#128276;</button>
 
 <div class="slides">
@@ -500,9 +503,89 @@
             <p style="font-size:clamp(0.88rem,1.2vw,1rem);">Iedereen kan het uitvoeren en beoordelen</p>
         </div>
     </div>
+
+    <div class="definitie blauw" style="margin-top:10px;">
+        Concreet = precies wat er gebeurt<br>
+        Meetbaar = je kunt ja/nee zeggen<br>
+        Testbaar = iemand anders kan dit uitvoeren
+    </div>
+
+    <div class="twee-kol" style="margin-top:10px;">
+        <div class="blok rood-rand">
+            <h3 style="color:var(--rood);">Te vaag</h3>
+            <ul>
+                <li>De app werkt goed</li>
+                <li>De berekening klopt</li>
+                <li>De gebruiker krijgt snel een antwoord</li>
+            </ul>
+        </div>
+        <div class="blok groen-rand">
+            <h3 style="color:var(--groen);">Wel goed</h3>
+            <ul>
+                <li>Als ik €30 invoer met 3 personen, dan toont de app €10 per persoon</li>
+                <li>Als ik een leeg veld laat en op berekenen klik, dan verschijnt een foutmelding</li>
+                <li>Als ik 10% fooi invoer bij €100, dan toont de app €10 fooi en €110 totaal</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<!-- ═══ SLIDE 3: VOORBEELD BUG HUNT ═══ -->
+
+<!-- ═══ SLIDE 3: CHECK JE INZICHT ═══ -->
+<div class="slide ac-slide" data-sectie="ac">
+    <span class="badge badge-ac">CHECK JE INZICHT</span>
+    <h2>Welke zijn goede acceptatiecriteria?</h2>
+
+    <div class="drie-kol">
+
+        <div class="onthul-kaart" onclick="this.classList.toggle('geopend')">
+            <div class="ac-item rood-link">
+                Als ik een bedrag invoer, dan werkt de app goed
+            </div>
+            <div class="onthul-hint">Klik om te checken</div>
+            <div class="ac-item groen-link" style="display:none;">
+                Niet goed → "werkt goed" is niet concreet of meetbaar
+            </div>
+        </div>
+
+        <div class="onthul-kaart" onclick="this.classList.toggle('geopend')">
+            <div class="ac-item groen-link">
+                Als ik €30 invoer met 3 personen, dan toont de app €10 per persoon
+            </div>
+            <div class="onthul-hint">Klik om te checken</div>
+            <div class="ac-item groen-link" style="display:none;">
+                Goed → concreet, meetbaar en testbaar
+            </div>
+        </div>
+
+        <div class="onthul-kaart" onclick="this.classList.toggle('geopend')">
+            <div class="ac-item rood-link">
+                Als ik iets fout doe, dan geeft de app een foutmelding
+            </div>
+            <div class="onthul-hint">Klik om te checken</div>
+            <div class="ac-item groen-link" style="display:none;">
+                Niet goed → "iets fout" is te vaag
+            </div>
+        </div>
+
+        <div class="onthul-kaart" onclick="this.classList.toggle('geopend')">
+            <div class="ac-item groen-link">
+                Als ik een leeg veld laat en op berekenen klik, dan verschijnt een foutmelding
+            </div>
+            <div class="onthul-hint">Klik om te checken</div>
+            <div class="ac-item groen-link" style="display:none;">
+                Goed → duidelijk en testbaar
+            </div>
+        </div>
+
+    </div>
+
+    <div class="definitie blauw">
+        Check: kun je het testen en krijg je een ja/nee antwoord?
+    </div>
+</div>
+
+<!-- ═══ SLIDE 4: VOORBEELD BUG HUNT ═══ -->
 <div class="slide us-slide" data-sectie="us">
     <span class="badge badge-us">VOORBEELD — BUG HUNT</span>
     <h2>User story + <em>criteria</em></h2>
@@ -532,11 +615,57 @@
     </div>
 </div>
 
-<!-- ═══ SLIDE 4: VAN US NAAR CRITERIA ═══ -->
+<!-- ═══ SLIDE 5: VERSCHIL US vs AC ═══ -->
+<div class="slide us-slide" data-sectie="us">
+    <span class="badge badge-us">VERSCHIL</span>
+    <h2>Verwar deze twee niet</h2>
+
+    <div class="twee-kol">
+        <div class="blok oranje-rand">
+            <h3 style="color:var(--oranje);">User story</h3>
+            <p><strong>Wat wil de gebruiker?</strong></p>
+            <p>Een user story beschrijft het doel of de wens van de gebruiker.</p>
+            <div class="us-blok">
+                <span class="kw">Als</span> gebruiker<br>
+                wil ik een bedrag en fooi invoeren<br>
+                <span class="kw">zodat</span> ik weet hoeveel ik moet betalen
+            </div>
+        </div>
+
+        <div class="blok groen-rand">
+            <h3 style="color:var(--groen);">Acceptatiecriteria</h3>
+            <p><strong>Wanneer is het goed?</strong></p>
+            <p>Acceptatiecriteria beschrijven wat er precies moet gebeuren om te kunnen testen.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div class="ac-item groen-link">
+                    <span class="als">Als</span>&nbsp;een gebruiker €100 invoert met 10% fooi,<br>
+                    <span class="dan">dan</span> <span class="res">toont TipSplit fooi = €10 en totaal = €110</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="definitie blauw">
+        User story = wat wil de gebruiker?<br>
+        Acceptatiecriteria = wanneer is het goed en testbaar?
+    </div>
+</div>
+
+<!-- ═══ SLIDE 6: VAN US NAAR CRITERIA ═══ -->
 <div class="slide ac-slide" data-sectie="ac">
     <span class="badge badge-ac">VAN USER STORY NAAR CRITERIA</span>
-    <h2>Jij gaat nu <em>2 acceptatiecriteria voor TipSplit schrijven</em></h2>
+    <h2>Van user story naar <em>acceptatiecriteria</em></h2>
+    <div class="definitie blauw" style="margin-bottom:8px;">Eerst heb je de user story. Daarna maak je daar acceptatiecriteria bij.</div>
     <div style="font-family:var(--mono);font-size:clamp(0.9rem,1.3vw,1.05rem);color:var(--dim);line-height:1.6;padding:14px 20px;background:var(--surface);border-radius:10px;border-left:3px solid var(--groen);">Tot nu toe heb je gezien wat acceptatiecriteria doen — nu ga je ze <strong style="color:var(--groen);">zelf toepassen</strong>.<br><br>Schrijf <strong style="color:var(--groen);">2 acceptatiecriteria voor TipSplit</strong> en gebruik deze om te testen of het programma klopt.</div>
+
+    <div class="blok blauw-rand" style="margin-top:16px;">
+        <h3 style="color:var(--blauw);">Kies wat je gaat testen</h3>
+        <ul>
+            <li>bedrag + aantal personen</li>
+            <li>fooi berekenen</li>
+            <li>fout invoer (leeg veld)</li>
+        </ul>
+    </div>
 
     <div class="twee-kol">
         <div>
@@ -580,7 +709,7 @@
 <div class="nav-balk">
     <button class="nav-btn" id="btn-vorige" disabled>&#9664; Vorige</button>
     <div class="nav-midden">
-        <span class="nav-slide-nr" id="nav-nr">1 / 4</span>
+        <span class="nav-slide-nr" id="nav-nr">1 / 6</span>
         <span class="nav-slide-titel" id="nav-titel">USER STORY</span>
         <span class="nav-hint">← → of knoppen</span>
     </div>
@@ -600,8 +729,8 @@
     })();
     document.body.style.paddingTop = '96px';
 
-    const slideTitels  = ['User Story','Wanneer is het goed?','Voorbeeld Bug Hunt','Van US naar criteria'];
-    const slideSectie  = ['us','ac','us','ac'];
+    const slideTitels  = ['User Story','Wanneer is het goed?','Check je inzicht','Voorbeeld Bug Hunt','Verschil US vs AC','Van US naar criteria'];
+    const slideSectie  = ['us','ac','ac','us','us','ac'];
     const tabIds       = { us:'tab-us', ac:'tab-ac' };
     const sectieKleur  = { us:'#ff6b35', ac:'#00c07a' };
 
@@ -673,6 +802,7 @@
 
 
     gaNaar(0);
+
 </script>
 </body>
 </html>
