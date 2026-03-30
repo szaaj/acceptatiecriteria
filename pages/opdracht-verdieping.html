@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verdieping: Klaar? Ga verder!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0a0c10;
+            --surface: #12151c;
+            --border:  #1e2330;
+            --blauw:   #4facfe;
+            --groen:   #00c07a;
+            --goud:    #fbbf24;
+            --paars:   #a78bfa;
+            --rood:    #ff4757;
+            --text:    #eef0f6;
+            --dim:     #5a6278;
+            --mono:    'JetBrains Mono', monospace;
+            --sans:    'Syne', sans-serif;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 80px 48px 60px; display: flex; flex-direction: column; gap: 20px; }
+
+        .top-balk { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10,12,16,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 0 20px; z-index: 200; }
+        .top-btn { font-family: var(--mono); font-size: 0.82rem; font-weight: 700; padding: 7px 16px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--dim); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s; }
+        .top-btn:hover { border-color: var(--goud); color: var(--goud); }
+        .top-scheider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+        .top-titel { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
+
+        .content { max-width: 720px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+
+        .pagina-header h1 { font-size: clamp(1.8rem,3.

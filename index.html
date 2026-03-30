@@ -133,5 +133,51 @@
 
 
 
+
+<!-- ── REGELS POP-UP ─────────────────────────────────── -->
+<div id="regels-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+    <div style="background:#12151c;border:1px solid #1e2330;border-top:5px solid #00c07a;border-radius:18px;padding:36px 40px;max-width:520px;width:90%;display:flex;flex-direction:column;gap:20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;font-weight:700;letter-spacing:3px;color:#00c07a;">AFSPRAKEN VOOR DEZE LES</div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#eef0f6;margin:0;line-height:1.2;">Zo werken we<br><em style="font-style:normal;color:#00c07a;">vandaag samen</em></h2>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 16px;">
+                <span style="font-size:1.3rem;flex-shrink:0;">🤝</span>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;color:#eef0f6;line-height:1.5;"><strong>Respect voor elkaar</strong><br><span style="color:#5a6278;">Geef iedereen de ruimte om te leren op zijn eigen tempo.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 16px;">
+                <span style="font-size:1.3rem;flex-shrink:0;">📵</span>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;color:#eef0f6;line-height:1.5;"><strong>Telefoon weg</strong><br><span style="color:#5a6278;">Telefoon op tafel of in tas — alleen laptop voor de les.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 16px;">
+                <span style="font-size:1.3rem;flex-shrink:0;">🤫</span>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;color:#eef0f6;line-height:1.5;"><strong>Zelfstandig werken = in stilte</strong><br><span style="color:#5a6278;">Bij opdrachten werk je stil. Vragen aan je buur zijn oké, maar zacht.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 16px;">
+                <span style="font-size:1.3rem;flex-shrink:0;">🙋</span>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;color:#eef0f6;line-height:1.5;"><strong>Vraag stellen is goed</strong><br><span style="color:#5a6278;">Kom je er niet uit? Steek je hand op — de docent loopt rond.</span></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 16px;">
+                <span style="font-size:1.3rem;flex-shrink:0;">💻</span>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.88rem;color:#eef0f6;line-height:1.5;"><strong>Laptop = werktool</strong><br><span style="color:#5a6278;">Alleen de leswebsite open. Geen sociale media of games.</span></div>
+            </div>
+        </div>
+
+        <button onclick="document.getElementById('regels-overlay').style.display='none';localStorage.setItem('regels_gezien','1');"
+            style="background:#00c07a;color:#0a0c10;font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;padding:14px 28px;border:none;border-radius:10px;cursor:pointer;align-self:stretch;transition:all 0.15s;">
+            ✅ Begrepen — start de les
+        </button>
+    </div>
+</div>
+
+<script>
+    // Toon pop-up alleen als nog niet gezien in deze sessie
+    if (sessionStorage.getItem('regels_gezien')) {
+        document.getElementById('regels-overlay').style.display = 'none';
+    }
+    document.querySelector('#regels-overlay button').addEventListener('click', function() {
+        sessionStorage.setItem('regels_gezien', '1');
+    });
+</script>
 </body>
 </html>

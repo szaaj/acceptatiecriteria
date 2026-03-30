@@ -29,7 +29,7 @@
         .top-scheider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
         .top-titel { font-family: var(--mono); font-size: 0.78rem; color: var(--dim); letter-spacing: 2px; margin-left: 8px; }
 
-        .content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
+        .content { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; }
 
         /* HEADER */
         .pagina-header h1 { font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 800; letter-spacing: -0.5px; }
@@ -58,7 +58,7 @@
         .schrijfruimte { display: flex; flex-direction: column; gap: 12px; }
         .schrijf-item { display: flex; align-items: flex-start; gap: 12px; }
         .schrijf-nr { width: 32px; height: 32px; border-radius: 50%; background: rgba(167,139,250,0.15); color: var(--paars); font-family: var(--mono); font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 4px; }
-        textarea { width: 100%; min-height: 64px; font-family: var(--mono); font-size: 0.9rem; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; outline: none; transition: border-color 0.15s; line-height: 1.6; }
+        textarea { width: 100%; min-height: 80px; font-family: var(--mono); font-size: 1rem; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; outline: none; transition: border-color 0.15s; line-height: 1.6; }
         textarea:focus { border-color: var(--paars); }
         textarea::placeholder { color: var(--dim); }
 
@@ -66,7 +66,8 @@
         .volgende-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.95rem; font-weight: 700; padding: 13px 28px; border-radius: 10px; border: 2px solid var(--goud); background: rgba(251,191,36,0.08); color: var(--goud); text-decoration: none; transition: all 0.15s; align-self: flex-start; margin-top: 8px; }
         .volgende-btn:hover { background: var(--goud); color: var(--bg); }
 
-        @media (max-width: 768px) { body { padding: 70px 20px 60px; } }
+        @media (max-width: 900px) { body { padding: 70px 20px 60px; } }
+        @media (max-width: 900px) { .groepen-grid { grid-template-columns: 1fr !important; } }
  to { opacity:0.5; } }
     </style>
 </head>
@@ -105,22 +106,58 @@
 
 
 
-    <div class="blok goud-rand">
-        <h2>Kies jouw niveau</h2>
+        <div style="border:1px solid var(--border);border-radius:14px;padding:20px 24px;display:flex;flex-direction:column;gap:16px;">
+        <h2 style="font-size:1.3rem;font-weight:800;">Jouw groep</h2>
+        <p style="font-family:var(--mono);font-size:1rem;color:var(--dim);">De docent geeft aan welke groep jij bent. Kies daarna je niveau.</p>
 
-        <p><strong>Optie A (hulp):</strong></p>
-        <p>Kies 2 goede acceptatiecriteria en gebruik of pas ze aan:</p>
-        <ul>
-            <li>Als ik €50 invoer met 2 personen, dan toont de app €25 per persoon</li>
-            <li>Als ik een leeg veld laat, dan verschijnt een foutmelding</li>
-            <li>Als ik 10% fooi invoer bij €80, dan toont de app €8 fooi en €88 totaal</li>
-        </ul>
+        <div class="groepen-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div style="background:rgba(79,172,254,0.06);border:2px solid rgba(79,172,254,0.35);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+            <div style="font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px;color:#4facfe;">👤 GROEP 1 — GEBRUIKERSTESTEN</div>
+            <p style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Jij test of de app doet wat de gebruiker verwacht.<br>Denk aan: juiste berekening, fooi, bedrag per persoon.</p>
 
-        <p><strong>Optie B (standaard):</strong></p>
-        <p>Schrijf zelf 2 acceptatiecriteria.</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="background:rgba(79,172,254,0.08);border-left:4px solid #4facfe;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#4facfe;margin-bottom:6px;">OPTIE A — MET HULP</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Kies en pas aan:</p>
+                    <ul style="margin:6px 0 0 16px;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Als ik €30 invoer met 3 personen, dan toont de app €10 per persoon</li>
+                        <li style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Als ik 10% fooi invoer bij €100, dan toont de app €10 fooi en €110 totaal</li>
+                    </ul>
+                </div>
+                <div style="background:rgba(0,192,122,0.06);border-left:4px solid #00c07a;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#00c07a;margin-bottom:6px;">OPTIE B — STANDAARD</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:var(--text);">Schrijf zelf 2 criteria: wat moet de app tonen bij correcte invoer?</p>
+                </div>
+                <div style="background:rgba(251,191,36,0.06);border-left:4px solid #fbbf24;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#fbbf24;margin-bottom:6px;">OPTIE C — UITDAGING</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:var(--text);">Schrijf 3 criteria voor verschillende bedragen en fooipercentages. Vergelijk daarna met groep 2.</p>
+                </div>
+            </div>
+        </div>
+            <div style="background:rgba(167,139,250,0.06);border:2px solid rgba(167,139,250,0.35);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;">
+            <div style="font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px;color:#a78bfa;">⚠️ GROEP 2 — FOUTENTESTEN</div>
+            <p style="font-family:var(--mono);font-size:0.95rem;color:var(--text);">Jij test wat er misgaat bij verkeerde of rare invoer.<br>Denk aan: leeg veld, letters, negatief getal, 0 personen.</p>
 
-        <p><strong>Optie C (uitdaging):</strong></p>
-        <p>Schrijf 3 acceptatiecriteria, inclusief één foutscenario (bijvoorbeeld leeg veld).</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="background:rgba(79,172,254,0.08);border-left:4px solid #4facfe;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#4facfe;margin-bottom:6px;">OPTIE A — MET HULP</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Kies en pas aan:</p>
+                    <ul style="margin:6px 0 0 16px;display:flex;flex-direction:column;gap:4px;">
+                        <li style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Als ik een leeg veld laat en op berekenen klik, dan verschijnt een foutmelding</li>
+                        <li style="font-family:var(--mono);font-size:0.92rem;color:#9fb3c8;">Als ik een letter invoer in plaats van een getal, dan blokkeert de app de invoer</li>
+                    </ul>
+                </div>
+                <div style="background:rgba(0,192,122,0.06);border-left:4px solid #00c07a;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#00c07a;margin-bottom:6px;">OPTIE B — STANDAARD</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:var(--text);">Schrijf zelf 2 criteria: wat moet de app doen bij foutieve invoer?</p>
+                </div>
+                <div style="background:rgba(251,191,36,0.06);border-left:4px solid #fbbf24;border-radius:8px;padding:12px 14px;">
+                    <div style="font-family:var(--mono);font-size:0.92rem;font-weight:700;letter-spacing:2px;color:#fbbf24;margin-bottom:6px;">OPTIE C — UITDAGING</div>
+                    <p style="font-family:var(--mono);font-size:0.92rem;color:var(--text);">Schrijf 3 foutscenario's. Bedenk ook: wat zou een goede foutmelding moeten zeggen?</p>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 
         <div class="blok paars-rand">
@@ -145,13 +182,101 @@
             <li>Is het meetbaar (ja of nee)?</li>
             <li>Kan iemand anders dit testen?</li>
         </ul>
-    </div><a class="volgende-btn" href="opdracht-testen.html">Klaar? Ga testen ▶</a>
+    </div>
+
+    <div style="border:2px solid rgba(167,139,250,0.35);border-top:4px solid #a78bfa;border-radius:14px;padding:20px 24px;display:flex;flex-direction:column;gap:16px;">
+        <div style="font-family:var(--mono);font-size:0.95rem;font-weight:700;letter-spacing:2px;color:#a78bfa;">👥 PEERFEEDBACK — VÓÓR JE GAAT TESTEN</div>
+        <p style="font-family:var(--mono);font-size:1rem;color:var(--text);">Laat je criteria lezen door je buur. Klik op elke vraag om hem te beantwoorden.</p>
+
+        <div id="pf-stap" style="display:flex;flex-direction:column;gap:10px;">
+
+            <div class="pf-kaart" onclick="peerStap(this, 1)" data-stap="1"
+                 style="background:rgba(167,139,250,0.06);border:2px solid rgba(167,139,250,0.3);border-radius:12px;padding:18px 22px;cursor:pointer;transition:all 0.2s;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-family:var(--mono);font-size:1.15rem;font-weight:700;color:#a78bfa;">
+                        <span style="font-size:1.3rem;margin-right:10px;">1</span>Is het duidelijk <em style="font-style:normal;color:var(--text);">wat er moet gebeuren?</em>
+                    </div>
+                    <span style="font-family:var(--mono);font-size:0.95rem;color:var(--dim);">concreet · klik om te beoordelen</span>
+                </div>
+                <div class="pf-antwoord" style="display:none;margin-top:14px;display:none;">
+                    <div style="display:flex;gap:10px;margin-top:8px;">
+                        <button onclick="event.stopPropagation();peerScore(this,'ja',1)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #00c07a;background:rgba(0,192,122,0.08);color:#00c07a;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">✅ Ja</button>
+                        <button onclick="event.stopPropagation();peerScore(this,'nee',1)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #ff4757;background:rgba(255,71,87,0.08);color:#ff4757;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">❌ Nee — pas aan</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pf-kaart" onclick="peerStap(this, 2)" data-stap="2"
+                 style="background:rgba(167,139,250,0.06);border:2px solid rgba(167,139,250,0.3);border-radius:12px;padding:18px 22px;cursor:pointer;transition:all 0.2s;opacity:0.4;pointer-events:none;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-family:var(--mono);font-size:1.15rem;font-weight:700;color:#a78bfa;">
+                        <span style="font-size:1.3rem;margin-right:10px;">2</span>Kun jij dit uitvoeren <em style="font-style:normal;color:var(--text);">zonder uitleg?</em>
+                    </div>
+                    <span style="font-family:var(--mono);font-size:0.95rem;color:var(--dim);">testbaar</span>
+                </div>
+                <div class="pf-antwoord" style="display:none;">
+                    <div style="display:flex;gap:10px;margin-top:8px;">
+                        <button onclick="event.stopPropagation();peerScore(this,'ja',2)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #00c07a;background:rgba(0,192,122,0.08);color:#00c07a;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">✅ Ja</button>
+                        <button onclick="event.stopPropagation();peerScore(this,'nee',2)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #ff4757;background:rgba(255,71,87,0.08);color:#ff4757;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">❌ Nee — pas aan</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pf-kaart" onclick="peerStap(this, 3)" data-stap="3"
+                 style="background:rgba(167,139,250,0.06);border:2px solid rgba(167,139,250,0.3);border-radius:12px;padding:18px 22px;cursor:pointer;transition:all 0.2s;opacity:0.4;pointer-events:none;">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="font-family:var(--mono);font-size:1.15rem;font-weight:700;color:#a78bfa;">
+                        <span style="font-size:1.3rem;margin-right:10px;">3</span>Kun je <em style="font-style:normal;color:var(--text);">ja of nee</em> zeggen op het resultaat?
+                    </div>
+                    <span style="font-family:var(--mono);font-size:0.95rem;color:var(--dim);">meetbaar</span>
+                </div>
+                <div class="pf-antwoord" style="display:none;">
+                    <div style="display:flex;gap:10px;margin-top:8px;">
+                        <button onclick="event.stopPropagation();peerScore(this,'ja',3)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #00c07a;background:rgba(0,192,122,0.08);color:#00c07a;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">✅ Ja</button>
+                        <button onclick="event.stopPropagation();peerScore(this,'nee',3)" style="flex:1;padding:12px;border-radius:8px;border:2px solid #ff4757;background:rgba(255,71,87,0.08);color:#ff4757;font-family:var(--mono);font-size:1rem;font-weight:700;cursor:pointer;">❌ Nee — pas aan</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="pf-klaar" style="display:none;background:rgba(0,192,122,0.08);border:2px solid rgba(0,192,122,0.3);border-radius:10px;padding:14px 18px;font-family:var(--mono);font-size:1rem;color:#00c07a;font-weight:700;text-align:center;">
+            ✅ Peerfeedback klaar — pas je criterium aan indien nodig, dan ga je testen.
+        </div>
+
+        <p style="font-family:var(--mono);font-size:1rem;color:var(--dim);">Beantwoord alle drie de vragen voordat je gaat testen.</p>
+    </div>
+
+    <a class="volgende-btn" href="opdracht-testen.html">Klaar? Ga testen ▶</a>
 
 </div>
 
 <script src="../js/sidebar.js"></script>
 <script>
     LesZijbalk.init('schrijven');
+
+    // Peerfeedback interactie
+    let pfHuidigeStap = 1;
+    function peerStap(el, stap) {
+        if (stap !== pfHuidigeStap) return;
+        const antwoord = el.querySelector('.pf-antwoord');
+        if (antwoord) antwoord.style.display = antwoord.style.display === 'none' ? 'block' : 'none';
+    }
+    function peerScore(btn, score, stap) {
+        const kaart = btn.closest('.pf-kaart');
+        const kleur = score === 'ja' ? '#00c07a' : '#ff4757';
+        kaart.style.borderColor = kleur;
+        kaart.style.opacity = '1';
+        btn.style.fontWeight = '900';
+        btn.style.transform = 'scale(1.05)';
+        pfHuidigeStap = stap + 1;
+        if (pfHuidigeStap <= 3) {
+            const volgende = document.querySelector('[data-stap="' + pfHuidigeStap + '"]');
+            if (volgende) { volgende.style.opacity = '1'; volgende.style.pointerEvents = 'auto'; }
+        } else {
+            document.getElementById('pf-klaar').style.display = 'block';
+        }
+    }
 
     // Sla op in localStorage + herstel bij laden
     function slaOp() {
